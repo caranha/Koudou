@@ -33,20 +33,25 @@ class Controller():
         self.rng = np.random.default_rng(seed=self.d_param["SEED"])
         # self.step_length = self.d_param["STEP_LENGTH"]
 
+        self.init_logger()
 
         if self.d_param["MAP_CACHE"] is not None and path.isfile(self.d_param["MAP_CACHE"]):
+            self.logger.write_line("log.txt", "Found map cache")
             self.load_map(self.d_param["MAP_CACHE"])
         else:
+            self.logger.write_line("log.txt", "Unable to find map cache")
             self.load_map(self.d_param["MAP"])
 
         if self.d_param["SIM_CONFIG"]:
+            self.logger.write_line("log.txt", "Loading and setting up the simulation")
             self.load_sim()
 
         # bindings
         if self.d_param["USE_VIEW"]:
+            self.logger.write_line("log.txt", "Using View")
             self.load_view()
 
-        self.init_logger()
+        
 
     def print_map(self):
         self.print_msg(self.map)
@@ -124,11 +129,13 @@ class Controller():
                               kd_map       = self.map,
                               rng          = self.rng,
                               agents_count = self.d_param["N_AGENTS"],
+                              logger       = self.logger,
                               threads      = self.d_param["THREADS"],
                               report       = None
         )
 
         if self.d_param["DISEASES"]:
+            self.logger.write_line("log.txt", "Adding diseases module")
             # todo: we shouldnt pass thw whole simulator, just the necessary things
             # i guess just agents, but Im not changing this to avoid bugs
             self.sim.modules.append(
@@ -137,6 +144,7 @@ class Controller():
                                 rng        = self.rng))
 
         if self.d_param["EVACUATION"]:
+            self.logger.write_line("log.txt", "Adding evacuation module")
             self.sim.modules.append(
                 EvacuationModule(distance = self.d_param["EVACUATION"]["DISTANCE"],
                                  share_information_chance = self.d_param["EVACUATION"]["SHARE_INFO_CHANCE"]))

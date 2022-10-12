@@ -16,6 +16,9 @@ class Logger():
         data = "\n".join([",".join(map(str, e)) for e in zip(*data)])
         self.files[filename].write(data+"\n")
 
+    def write_line(self, filename, data):
+        self.files[filename].write(data+"\n")
+
     def add_file(self, filename, header=None):
         self.files[filename] = open(f"{self.path}/{filename}", "a")
 

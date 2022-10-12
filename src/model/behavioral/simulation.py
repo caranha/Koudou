@@ -4,19 +4,21 @@ from src.model.behavioral.agent import Agent
 from src.util.time_stamp import TimeStamp
 import src.model.map.a_star as a_star
 class Simulation:
-	def __init__(self,config,kd_map,rng,agents_count,threads = 1, report = None):
+	def __init__(self,config,kd_map,rng,agents_count,logger, threads = 1, report = None):
 		self.agents: List[Agent] = []
-		attribute_generator = agent_manager.load_attributes_generator(config["attributes"],rng)
-		self.agents = agent_manager.generate_agents(kd_map,attribute_generator,agents_count)
-		self.conditions = agent_manager.load_conditions(config["condition"],rng)
+		self.logger = logger
+		attribute_generator = agent_manager.load_attributes_generator(config["attributes"],rng, self.logger)
+		self.agents = agent_manager.generate_agents(kd_map,attribute_generator,agents_count, self.logger)
+		self.conditions = agent_manager.load_conditions(config["condition"],rng, self.logger)
 		self.behaviors = {}
 		for key in config["behaviors"]:
-			self.behaviors[key] = agent_manager.load_behavior(key, config["behaviors"][key], self.conditions, rng)
+			self.behaviors[key] = agent_manager.load_behavior(key, config["behaviors"][key], self.conditions, rng, self.logger)
+		self.logger.write_line("log.txt", "Adding behaviors to agents")
 		for x in self.agents:
 			x.behaviors = self.behaviors
 			x.default_behavior = self.behaviors[config["default_behavior"]]
 		self.attributes = {}
-		attribute_generator.generate_attribute_for_simulation(self,kd_map)
+		attribute_generator.generate_attribute_for_simulation(self,kd_map, self.logger)
 		self.rng = rng
 		self.ts = TimeStamp(0)
 		self.threads = threads

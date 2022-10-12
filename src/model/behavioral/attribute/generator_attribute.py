@@ -299,22 +299,30 @@ class GeneratorAttribute:
 		return agent
 
 
-	def generate_attribute_for_simulation(self,kd_sim,kd_map):
+	def generate_attribute_for_simulation(self,kd_sim,kd_map, logger):
 		# add basic attribute
 		for attr in self.basic_sim:
+			line = "Adding " + attr + " to basic_sim"
+			logger.write_line("log.txt", line)
 			kd_sim.add_attribute(Attribute(attr,self.basic_sim[attr]["value"],self.basic_sim[attr]["type"]))
 
 		# add updateable attribute
 		for key in self.updateable_sim:
+			line = "Adding " + key + " to updateable_sim"
+			logger.write_line("log.txt", line)
 			attr = self.updateable_sim[key]
 			kd_sim.add_attribute(AttributeUpdateable(key, self.rng.uniform(attr["default_min"],attr["default_max"],1)[0], attr["min"], attr["max"], attr["step_update"], attr["type"]))
 
 		# add option based attribute
 		for key in self.option_sim:
+			line = "Adding " + key + " to option_sim"
+			logger.write_line("log.txt", line)
 			value = self.rng.choice(self.option_sim[key]["value"],1,p=self.option_sim[key]["weights"])[0]
 			kd_sim.add_attribute(AttributeOption(key,value,self.option_sim[key]["options"],self.option_sim[key]["type"]))
 
 		for key in self.schedules_sim:
+			line = "Adding " + key + " to schedules_sim"
+			logger.write_line("log.txt", line)
 			kd_sim.add_attribute(AttributeSchedule(key, self.schedules_sim[key]["start_time"],self.schedules_sim[key]["end_time"]))
 
 	def __str__(self):

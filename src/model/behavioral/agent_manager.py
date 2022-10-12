@@ -7,12 +7,15 @@ from src.model.behavioral.activity.activity import Activity
 from .agent import Agent
 from .behavior import Behavior
 #from src.model.behavioral.activity.reward import Reward
-def load_attributes_generator(file_names,rng):
+def load_attributes_generator(file_names,rng, logger):
+	logger.write_line("log.txt", "Loading attribute generator")
 	return GeneratorAttribute(file_names,rng)
 
-def load_conditions(condition_files,rng):
+def load_conditions(condition_files,rng, logger):
 	conditions = {}
 	for condition_file in condition_files:
+		line = "Loading conditions from " + condition_file
+		logger.write_line("log.txt", line)
 		data = read_csv_as_dict(condition_file)
 		for x in data:
 			if x["target"] == "random":
@@ -21,8 +24,10 @@ def load_conditions(condition_files,rng):
 				conditions[x["name"]] = Condition(x["name"],x["attribute"],x["value"],x["operator"],x["type"],x["target"])
 	return conditions
 	
-def generate_agents(kd_map,attribute_generator,n_agents):
+def generate_agents(kd_map,attribute_generator,n_agents, logger):
 	agents = []
+	line = "Generating " + str(n_agents) + " agents"
+	logger.write_line("log.txt", line)
 	for ag_id in range(n_agents):
 		agent = Agent(ag_id)
 		attribute_generator.generate_attribute(agent, kd_map)
@@ -42,7 +47,9 @@ def load_activities(activity_file,conditions_dict, rng):
 		activities.append(act)
 	return activities
 
-def load_behavior(name,file_name,condition_dict, rng):
+def load_behavior(name,file_name,condition_dict, rng, logger):
+	line = "Loading behavior [" + name + "] from " + file_name
+	logger.write_line("log.txt", line)
 	behavior = Behavior(name)
 	activities = load_activities(file_name,condition_dict, rng)
 	behavior.activities = activities
