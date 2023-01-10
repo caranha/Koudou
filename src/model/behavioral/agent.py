@@ -19,6 +19,9 @@ class Agent:
 	def get_attribute(self,name):
 		return self.attributes[name].get_value
 
+	def has_attribute(self,name):
+		return name in self.attributes.keys()
+	
 	def update_attribute(self,attribute_name,value):
 		if (value.lower() == "max"):
 			self.attributes[attribute_name].set_max()

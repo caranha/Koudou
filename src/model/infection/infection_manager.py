@@ -17,14 +17,15 @@ def initialize_infection(disease_files, population: List[Agent], rng, logger):
         
         d = Disease(
             d_config["name"],
+            d_config["symptoms"],
             d_config["attributes"],
             d_config["transition_states"],
             d_config["infection_file"],
             d_config["infectious_states"],
             d_config["infected_starting_state"]
         )
+        logger.write_log(str(d))
         diseases.append(d)
-
         initializate_disease_on_population(d, d_config["initialization"], population, rng, logger)
 
     return Infection(diseases)
@@ -36,12 +37,11 @@ def initializate_disease_on_population(disease: Disease, initialization: Dict, p
         ag.add_attribute(new_attr)
 
 
-    qtd = 0
+    
     if initialization["type"] == "absolute":
         qtd = initialization["value"]
     elif initialization["type"] == "percentage":
         qtd = len(population) * initialization["value"]
-    
     infected_ags = rng.choice(population, qtd, replace = False)
     for ag in infected_ags:
         ag.set_attribute(disease.name, initialization["state"])
@@ -58,10 +58,46 @@ def infection_step(step_size: int, kd_map: Map, population: List[Agent], infecti
     for disease in infection_module.diseases.values():
         disease_transmission_verbose(step_size, kd_map, population, disease, rng, logger,ts)
 
-    
+def create_symptoms(step_size, ag: Agent, disease: Disease, rng, logger,ts):
+    for symptom, sympt_attr in disease.symptoms.items():
+        if (not ag.has_attribute(symptom)):
+            symptom_chance = apply_time_scale(step_size, sympt_attr["scale"], sympt_attr["probability"])
+            rand_value = rng.uniform(0.0,1.0,1)[0]
+            if rand_value < symptom_chance:
+                new_attr = Attribute(symptom, "symptomatic")
+                ag.add_attribute(new_attr)
+                data = {}
+                data["time_stamp"] = ts.step_count
+                data["disease_name"] = disease.name
+                data["agent_id"] = ag.agent_id
+                data["agent_profession"] = ag.get_attribute("profession")
+                data["agent_location"] = ag.get_attribute("location")
+                data["agent_node_id"] = ag.get_attribute("current_node_id")
+                data["symptom"] = symptom
+                data["state"] = "symptomatic"
+                logger.write_csv_data("symptom.csv", data)
+
+def remove_symptoms(ag: Agent, disease: Disease, rng, logger, ts):
+    for symptom in disease.symptoms:
+        if (ag.has_attribute(symptom)):
+            ag.update_attribute(symptom, "asymptomatic")
+            data = {}
+            data["time_stamp"] = ts.step_count
+            data["disease_name"] = disease.name
+            data["agent_id"] = ag.agent_id
+            data["agent_profession"] = ag.get_attribute("profession")
+            data["agent_location"] = ag.get_attribute("location")
+            data["agent_node_id"] = ag.get_attribute("current_node_id")
+            data["symptom"] = symptom
+            data["state"] = "asymptomatic"
+            logger.write_csv_data("symptom.csv", data)
 
 def infected_next_stage(step_size, ag: Agent, disease: Disease, rng, logger,ts):
     current_state = ag.get_attribute(disease.name)
+    if (current_state == "symptomatic"):
+        create_symptoms(step_size, ag, disease, rng, logger, ts)
+    elif (current_state == "recovered"):
+        remove_symptoms(ag, disease, rng, logger, ts)
     next_state = current_state
     if current_state in disease.transitions:
         rand_value = rng.uniform(0.0,1.0,1)[0]
@@ -71,6 +107,7 @@ def infected_next_stage(step_size, ag: Agent, disease: Disease, rng, logger,ts):
             if rand_value < previous_chances + chance:
                 next_state = compartiment
                 data = {}
+                data["time"] = ts.get_hour_min_str()
                 data["time_stamp"] = ts.step_count
                 data["disease_name"] = disease.name
                 data["agent_id"] = ag.agent_id
@@ -101,6 +138,7 @@ def apply_time_scale(step_size, time_scale, chance):
 
 def log(infection_type,disease,infector,infectee,logger,ts):
     data = {}
+    data["time"] = ts.get_hour_min_str()
     data["time_stamp"] = ts.step_count
     data["type"] = infection_type
     data["disease_name"] = disease.name
