@@ -24,7 +24,6 @@ def load_conditions(condition_files,rng, logger):
 	
 def generate_agents(kd_map,attribute_generator,n_agents,rng,logger):
 	agents = []
-	logger.write_log("Generating " + str(n_agents) + " agents")
 	for ag_id in range(n_agents):
 		agent = Agent(ag_id)
 		attribute_generator.generate_attribute(agent, kd_map, rng, logger, ag_id == (n_agents - 1))

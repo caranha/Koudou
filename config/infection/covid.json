@@ -1,15 +1,5 @@
 {
     "name": "covid",
-    "symptoms": {
-        "cough": {
-            "scale": "per_day",
-            "probability": 0.5
-        },
-        "cold": {
-            "scale": "per_day",
-            "probability": 0.4
-        }
-    },
     "initialization": {
         "type": "absolute",
         "value": 5,
@@ -57,8 +47,8 @@
                 "scale": "per_day",
                 "probability": 0.23
             }
-        },
-        "recovered": {
+        }
+,        "recovered": {
             "susceptible": {
                 "scale": "per_day",
                 "probability": 0.0

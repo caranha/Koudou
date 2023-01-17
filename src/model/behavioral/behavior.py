@@ -14,7 +14,6 @@ class Behavior:
 			if act.check_conditions(agent,kd_sim, kd_map, ts,rng):
 				if agent.previous_activity != act.name:
 					temp_activity = {}
-					temp_activity["time"] = ts.get_hour_min_str()
 					temp_activity["time_stamp"] = ts.step_count
 					temp_activity["agent_id"] = agent.agent_id
 					temp_activity["profession"] = agent.get_attribute("profession")
