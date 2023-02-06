@@ -56,7 +56,8 @@ def build_map(osm_file_path, bldg_tags, business_data, grid_size=10,evacuation_c
 
 	places = create_places_osm(ways, kd_map, main_road_graph, grid_size)
 	
-	kd_map.d_places = places
+	for p in places:
+		kd_map.add_place(p)
 
 	print(f"Finished creating places ({time.time() - st}s) ")
 	st = time.time()
@@ -120,7 +121,7 @@ def create_types_from_osm_tags(kd_map: Map):
 	return businesses, residences
 
 def create_places_osm(ways, kd_map, main_road_graph, grid_size):
-	places = {}
+	places = []
 	road_grid = create_node_grid(kd_map, main_road_graph, grid_size)
 	for w in ways:
 		if 'building' not in w.tags:
@@ -134,7 +135,7 @@ def create_places_osm(ways, kd_map, main_road_graph, grid_size):
 	
 		render_info = Render_info([kd_map.d_nodes[n_id].coordinate for n_id in w.nodes], centroid.coordinate, w.tags)
 		p = Place(w.id, True, render_info, centroid.id, road_connection)
-		places[p.id] = p
+		places.append(p)
 	return places
 
 def create_centroid(way, n_dict):

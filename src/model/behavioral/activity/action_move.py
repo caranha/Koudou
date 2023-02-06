@@ -19,9 +19,8 @@ class ActionMove(Action):
         """
         super(ActionMove,self).__init__()
         self.destination = ""
-        temp = destination_string
-        temp =temp.replace(")", "")
         self.destination_string = destination_string
+        dest_str = destination_string.replace(")", "")
         self.ts = ts
         self.sequence = []
         self.agent = agent
@@ -46,24 +45,26 @@ class ActionMove(Action):
             self.destination = kd_map.get_random_connected_nodes(self.origin,agent.get_attribute("last_node_id"),rng)
         else:
             self.typing = "destination_type"
-            if ("(" in temp):
-                temp2 = temp.split("(")
-                temp = temp2[0]
-                if (temp2[1].lower() == "destination_id") or (temp2[1].lower() == "id"):
+            if ("(" in dest_str):
+                split_destination = dest_str.split("(")
+                dest_str = split_destination[0]
+                if (split_destination[1].lower() == "destination_id") or (split_destination[1].lower() == "id"):
                     self.typing = "destination_id"
-                elif (temp2[1].lower() == "destination_type") or (temp2[1].lower() == "type"):
+                elif (split_destination[1].lower() == "destination_type") or (split_destination[1].lower() == "type"):
                     self.typing = "destination_type"
                 else:
-                    raise ValueError(f"Unknown destination type : {temp2[1].lower()}")
+                    raise ValueError(f"Unknown destination type : {split_destination[1].lower()}")
     
-            if ("$" in temp):
-                temp = agent.get_attribute(temp.replace("$",""))
+            if ("$" in dest_str):
+                dest_str = agent.get_attribute(dest_str.replace("$",""))
 
             if self.typing == "destination_type":
-                self.target_type = temp
-                self.destination = kd_map.get_random_business(temp, 1, rng,time_stamp = ts, only_open = True)[0].node_id
+                # self.target_type = dest_str
+                self.destination = kd_map.get_random_business(dest_str, 1, rng,time_stamp = ts, only_open = True)[0].node_id
             elif self.typing == "destination_id":
-                self.destination = temp
+                self.destination = dest_str
+            target_place = kd_map.d_places_by_centroid[self.destination]
+            self.target_type = target_place.type
         self.reseted = False
 
     def force_reset(self):

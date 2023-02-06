@@ -22,6 +22,7 @@ class Map():
         self.max_coord = Coordinate(bounding_box.top_right.lat, bounding_box.top_right.lon)
 
         self.d_places: Dict[str, Place] = {}
+        self.d_places_by_centroid: Dict[str, Place] = {}
         self.d_roads: Dict[Tuple[str, str], Road] = {} # the tuple of id is ordered, NOT start, goal
         self.d_businesses: Dict[str, Business] = {} 
         self.d_residences: Dict[str, Residence] = {}
@@ -38,6 +39,7 @@ class Map():
 
     def add_place(self, place):
         self.d_places[place.id] = place
+        self.d_places_by_centroid[place.centroid] = place
 
     def add_road(self, road):
         t = (road.start_id, road.goal_id)
@@ -81,21 +83,15 @@ class Map():
     def get_closest_evacuation_center(self,coordinate, explored_places, home_id):
         explored_evac_center = explored_places.split(",")
         distance = sys.float_info.max
-        place = None
+        place = self.d_places_by_centroid[home_id]
         for evac_place_id in self.d_evacuation_centers:
             temp_place = self.d_evacuation_centers[evac_place_id]
             node = self.d_nodes[temp_place.centroid]
             temp_distance = node.coordinate.calculate_distance(lat = coordinate.lat,lon = coordinate.lon)
-            if temp_place.centroid not in explored_places and temp_distance < distance:
+            if temp_place.centroid not in explored_evac_center and temp_distance < distance:
                 place = self.d_evacuation_centers[evac_place_id]
                 distance = temp_distance
 
-        # TODO: check what to do if there is not available evacuation palces anymore
-        if place == None:
-            for p in self.d_places.values():
-                if p.centroid == home_id:
-                    place = p
-                    break
         return place
 
     def get_random_connected_nodes(self,node_id, last_visited,rng):
