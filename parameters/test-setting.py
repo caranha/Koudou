@@ -1,8 +1,8 @@
 parameters = {
     "EXP_NAME":       "test_config_file",     # Name of the experiment, used for saving ther logs (logger not implemented yet) 
     "MAP":            "osm_files/test.osm", # Path for the osm file used for building the map
-    "MAP_CACHE":      "cache/TX-To-TU.pkl", # Where to save the map cache
-    "PATHFIND_CACHE": "cache/TX-pathfind.pkl", # where to save the pathfind cache
+    "MAP_CACHE":      "cache/test.pkl", # Where to save the map cache
+    "PATHFIND_CACHE": "cache/test-pathfind.pkl", # where to save the pathfind cache
 
 
     "SEED":            101512, # Seed used for reproducing experiments

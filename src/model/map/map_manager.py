@@ -130,8 +130,10 @@ def create_places_osm(ways, kd_map, main_road_graph, grid_size):
 		kd_map.add_node(centroid)
 
 		centroid_grid_coord = get_grid_coordinate(centroid.coordinate.lat, centroid.coordinate.lon, kd_map, grid_size)
-		road_connection = create_road_connection(centroid, centroid_grid_coord, road_grid, kd_map)
-	
+		road_connection = create_road_connection(centroid, centroid_grid_coord, road_grid, kd_map, main_road_graph)
+		if road_connection is None:
+			kd_map.delete_node(centroid)
+			continue
 		render_info = Render_info([kd_map.d_nodes[n_id].coordinate for n_id in w.nodes], centroid.coordinate, w.tags)
 		p = Place(w.id, True, render_info, centroid.id, road_connection)
 		places[p.id] = p
@@ -179,7 +181,7 @@ def get_grid_coordinate(lat, lon, kd_map, grid_size):
 	return (x, y)
 
 
-def get_closest_road(centroid: Node, centroid_grid_coord, road_grid, kd_map: Map):
+def get_closest_road(centroid: Node, centroid_grid_coord, road_grid, kd_map: Map, main_road):
 	x = centroid_grid_coord[0]
 	y = centroid_grid_coord[1]
 
@@ -191,7 +193,13 @@ def get_closest_road(centroid: Node, centroid_grid_coord, road_grid, kd_map: Map
 
 	for node1 in road_grid[x][y]:
 		n_1 = kd_map.d_nodes[node1]
+		if n_1 not in  main_road:
+			continue
 		for node2 in n_1.connections:
+			n_2 = kd_map.d_nodes[node2]
+			if n_1 == n_2 or n_2 not in main_road:
+				continue
+
 			index = (node1, node2)
 			if node2 < node1:
 				index = (node2, node1)
@@ -200,10 +208,7 @@ def get_closest_road(centroid: Node, centroid_grid_coord, road_grid, kd_map: Map
 				continue
 			visited_roads[index] = True
 
-			n_2 = kd_map.d_nodes[node2]
 
-			if n_1 == n_2:
-				continue
 
 			dist, c = get_dist_and_closest_coord(n_1, n_2, centroid)
 			if dist < road_dist:
@@ -214,9 +219,9 @@ def get_closest_road(centroid: Node, centroid_grid_coord, road_grid, kd_map: Map
 
 	return road_start, road_destination, closest_coord
 
-def create_road_connection(centroid: Node, centroid_grid_coord, road_grid, kd_map:Map):
+def create_road_connection(centroid: Node, centroid_grid_coord, road_grid, kd_map:Map, main_road):
 
-	road_start, road_destination, closest_coord = get_closest_road(centroid, centroid_grid_coord, road_grid, kd_map)
+	road_start, road_destination, closest_coord = get_closest_road(centroid, centroid_grid_coord, road_grid, kd_map, main_road)
 
 	if road_start is None or road_destination is None:
 		return None

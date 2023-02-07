@@ -43,6 +43,9 @@ class Map():
         t = (road.start_id, road.goal_id)
         self.d_roads[t] = road
 
+    def delete_node(self,node):
+        del self.d_nodes[node.id]
+
     def remove_road(self, start_id, goal_id):
         del self.d_roads[(start_id, goal_id)]
 
