@@ -13,6 +13,9 @@ import time
 import math
 import dash_bootstrap_components as dbc
 from plotly.subplots import make_subplots
+import xml.etree.ElementTree as xee
+import os
+
 
 # ---------------- global ------------------
 def timestamp_converter(timestamp):
@@ -247,6 +250,58 @@ def proportion_calculation(df):
         result_dict[location] = round(mean_count, 2)
 
     return result_dict
+
+
+def exits_in_df(df, lat, lon):
+    for i in range(len(df)):
+        if df.loc[i, 'centroid_lat']==lat and df.loc[i, 'centroid_lon']==lon:
+            df.loc[i, 'infection_num'] += 1
+            return True
+    return False
+
+
+def infection_heatmap(df_new_infection, domTree):
+    df_new_infection = df_new_infection.drop(['time', 'disease_name', 'agent_profession', 'source_profession', 'type',
+                                              'source_location', 'source_id', 'current_mask', 'next_mask'], axis=1)
+    df = pd.DataFrame(columns=['centroid_lat', 'centroid_lon', 'infection_num', 'business'], dtype=float)
+    list_node = []
+    for node in domTree.getroot().iter('node'):
+        list_node.append(node.attrib)
+
+    for i in range(len(df_new_infection)):
+        temp_id = df_new_infection.loc[i, 'agent_node_id'].split('_')[0]
+        for j in range(len(list_node)):
+            if list_node[j]['id'] == temp_id:
+                lat = list_node[j]['lat']
+                lon = list_node[j]['lon']
+                if exits_in_df(df, lat, lon):
+                    break
+                else:
+                    # insert
+                    df.loc[len(df.index)] = [lat, lon, 1, df_new_infection.loc[i, 'agent_location']]
+                    break
+
+    for i in range(len(df)):
+        df.loc[i, 'centroid_lat'] = float(df.loc[i, 'centroid_lat'])
+        df.loc[i, 'centroid_lon'] = float(df.loc[i, 'centroid_lon'])
+
+    dic = {}
+    for i in range(len(df)):
+        if df.loc[i, 'business'] in dic.keys():
+            dic[df.loc[i, 'business']] = dic[df.loc[i, 'business']] + df.loc[i, 'infection_num']
+        else:
+            dic[df.loc[i, 'business']] = df.loc[i, 'infection_num']
+
+    px.set_mapbox_access_token(
+        'pk.eyJ1Ijoic2ppYW5nMjMiLCJhIjoiY2xlb3Jid2c0MDU0NTNybnZlc3Rrb2J0ayJ9.Kc5kX7FNpk4MJODTFNS-BA')
+    fig = px.scatter_mapbox(df, lat="centroid_lat", lon="centroid_lon", color="infection_num", size="infection_num",
+                            color_continuous_scale=px.colors.cyclical.IceFire, size_max=50, zoom=10)
+    fig.update_layout(
+        height=600,
+        showlegend=True,
+        margin=go.layout.Margin(l=0, r=0, b=0, t=0, pad=0),
+    )
+    return fig
 
 
 # ---------------- upload ------------------
@@ -486,7 +541,7 @@ def IA_return_random_activity_history_list(model, random_id):
         ),
     ]
 
-    if random_id is "":
+    if random_id == "":
         disease_transition_pd = agent_id_filter(df_disease_transition, infection_agent_id_list[0])
         activity_history_pd = agent_id_filter(df_activity_history, infection_agent_id_list[0])
     else:
@@ -580,7 +635,7 @@ def IA_return_random_activity_history_table(model, random_id):
     df_new_infection = model.new_infection
     df_activity_history = model.activity_history
     infection_agent_id_list = build_infection_agent_list(df_new_infection)
-    if random_id is "":
+    if random_id == "":
         agent_pd = agent_id_filter(df_activity_history, infection_agent_id_list[0])
     else:
         agent_pd = agent_id_filter(df_activity_history, random_id)
@@ -625,7 +680,7 @@ def IA_return_random_disease_transition_table(model, random_id):
     df_new_infection = model.new_infection
     df_disease_transition = model.disease_transition
     infection_agent_id_list = build_infection_agent_list(df_new_infection)
-    if random_id is "":
+    if random_id == "":
         agent_pd = agent_id_filter(df_disease_transition, infection_agent_id_list[0])
     else:
         agent_pd = agent_id_filter(df_disease_transition, random_id)
