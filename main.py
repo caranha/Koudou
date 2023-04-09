@@ -10,7 +10,7 @@ def main():
     parser.add_argument("-s", dest='seed', help='Random Seed')
     args = parser.parse_args()
 
-    parameters = load_parameters(args.param, int(args.seed))
+    parameters = load_parameters(args.param, args.seed)
     parameters["USE_VIEW"] = args.use_view or parameters["USE_VIEW"]
 
     crtl = Controller(parameters=parameters)

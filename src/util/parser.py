@@ -18,7 +18,10 @@ def load_parameters(filename, seed):
     for key in ctx["parameters"].keys():
         parameters[key] = ctx["parameters"][key]
 
-    parameters['SEED'] = seed
+    if seed is None:
+        parameters['SEED'] = 999
+    else:
+        parameters['SEED'] = int(seed)
 
     return parameters
 
