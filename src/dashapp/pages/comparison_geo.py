@@ -223,6 +223,46 @@ layout = html.Div(style=style_data_align_0, children=[
 ])
 
 
+@callback(Output('transmit-map-one', 'children'),
+          Input('tm-random-input-one', 'value'))
+def track_infection_one(value):
+    f = ModelOne()
+    df_new_infecion = f.new_infection
+    domTree = xee.parse(r'I:\Epidemicon Research\Post-ALIFE\Koudou\src\dashapp\data\map_osm\tsukuba_area.osm')
+    trace_fig1, trace_fig2 = compute_fig2(df_new_infecion, domTree)
+
+    return html.Div(children=[
+        dcc.Graph(figure=trace_fig1),
+        dcc.Graph(figure=trace_fig2)
+    ])
+
+
+@callback(Output('transmit-map-two', 'children'),
+          Input('tm-random-input-two', 'value'))
+def track_infection_one(value):
+    f = ModelTwo()
+    df_new_infecion = f.new_infection
+    domTree = xee.parse(r'I:\Epidemicon Research\Post-ALIFE\Koudou\src\dashapp\data\map_osm\tsukuba_area.osm')
+    trace_fig1, trace_fig2 = compute_fig2(df_new_infecion, domTree)
+
+    return html.Div(children=[
+        dcc.Graph(figure=trace_fig1),
+        dcc.Graph(figure=trace_fig2)
+    ])
+
+
+@callback(Output('transmit-map-three', 'children'),
+          Input('tm-random-input-three', 'value'))
+def track_infection_one(value):
+    f = ModelThree()
+    df_new_infecion = f.new_infection
+    domTree = xee.parse(r'I:\Epidemicon Research\Post-ALIFE\Koudou\src\dashapp\data\map_osm\tsukuba_area.osm')
+    trace_fig1, trace_fig2 = compute_fig2(df_new_infecion, domTree)
+
+    return html.Div(children=[
+        dcc.Graph(figure=trace_fig1),
+        dcc.Graph(figure=trace_fig2)
+    ])
 
 
 @callback(
