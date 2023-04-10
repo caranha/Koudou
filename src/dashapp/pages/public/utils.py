@@ -261,6 +261,10 @@ def exits_in_df(df, lat, lon):
 
 
 def infection_heatmap(df_new_infection, domTree):
+    for i in range(len(df_new_infection)):
+        if df_new_infection.loc[i, 'source_profession'] == 'admin':
+            df_new_infection = df_new_infection.drop(i, inplace=False)
+    df_new_infection.reset_index(drop=True, inplace=True)
     df_new_infection = df_new_infection.drop(['time', 'disease_name', 'agent_profession', 'source_profession', 'type',
                                               'source_location', 'source_id', 'current_mask', 'next_mask'], axis=1)
     df = pd.DataFrame(columns=['centroid_lat', 'centroid_lon', 'infection_num', 'business'], dtype=float)
@@ -294,7 +298,8 @@ def infection_heatmap(df_new_infection, domTree):
 
     px.set_mapbox_access_token(
         'pk.eyJ1Ijoic2ppYW5nMjMiLCJhIjoiY2xlb3Jid2c0MDU0NTNybnZlc3Rrb2J0ayJ9.Kc5kX7FNpk4MJODTFNS-BA')
-    fig = px.scatter_mapbox(df, lat="centroid_lat", lon="centroid_lon", color="infection_num", size="infection_num",
+    fig = px.scatter_mapbox(df, lat="centroid_lat", lon="centroid_lon", hover_name="business",
+                            color="infection_num", size="infection_num",
                             color_continuous_scale=px.colors.cyclical.IceFire, size_max=50, zoom=10)
     fig.update_layout(
         height=600,
@@ -304,7 +309,7 @@ def infection_heatmap(df_new_infection, domTree):
     return fig
 
 
-def exits_in_df(df, lat, lon):
+def exits_in_df1(df, lat, lon):
     for i in range(len(df)):
         if df.loc[i, 'lat'] == lat and df.loc[i, 'lon'] == lon:
             df.loc[i, 'infection_num'] += 1
@@ -332,6 +337,7 @@ def find_business(lat, lon, list_node):
     start_business = 'None'
     return start_business
 
+
 def path_conversion(df_path, start, end):
     start_timestamp = start * 24 * 3600
     end_timestamp = end * 24 * 3600
@@ -339,6 +345,7 @@ def path_conversion(df_path, start, end):
     df_path2 = df_path.loc[(df_path['time'] >= start_timestamp) & (df_path['time'] < end_timestamp)]
     df_path3 = df_path.loc[df_path['time'] >= end_timestamp]
     return df_path1, df_path2, df_path3
+
 
 def lon_lat(df_path):
     lons = np.empty(3 * len(df_path))
@@ -368,7 +375,7 @@ def compute_fig2(loc_ana, domTree):
             if list_node[j]['id'] == temp_id:
                 lat = list_node[j]['lat']
                 lon = list_node[j]['lon']
-                if exits_in_df(df, lat, lon):
+                if exits_in_df1(df, lat, lon):
                     break
                 else:
                     # insert
