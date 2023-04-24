@@ -254,19 +254,26 @@ def proportion_calculation(df):
 
 def exits_in_df(df, lat, lon):
     for i in range(len(df)):
-        if df.loc[i, 'centroid_lat']==lat and df.loc[i, 'centroid_lon']==lon:
+        if df.loc[i, 'centroid_lat'] == lat and df.loc[i, 'centroid_lon'] == lon:
             df.loc[i, 'infection_num'] += 1
             return True
     return False
 
 
-def infection_heatmap(df_new_infection, domTree):
+def infection_heatmap(df_new_infection, domTree, start, end):
+    # delete admin infection cases
     for i in range(len(df_new_infection)):
         if df_new_infection.loc[i, 'source_profession'] == 'admin':
             df_new_infection = df_new_infection.drop(i, inplace=False)
     df_new_infection.reset_index(drop=True, inplace=True)
+    # delete useless columns
     df_new_infection = df_new_infection.drop(['time', 'disease_name', 'agent_profession', 'source_profession', 'type',
                                               'source_location', 'source_id', 'current_mask', 'next_mask'], axis=1)
+    # filter by time
+    steps_by_seconds = 24*60*60
+    df_new_infection = get_data_by_interval(start*steps_by_seconds, end*steps_by_seconds, df_new_infection)
+    df_new_infection.reset_index(drop=True, inplace=True)
+
     df = pd.DataFrame(columns=['centroid_lat', 'centroid_lon', 'infection_num', 'business'], dtype=float)
     list_node = []
     for node in domTree.getroot().iter('node'):
@@ -289,12 +296,24 @@ def infection_heatmap(df_new_infection, domTree):
         df.loc[i, 'centroid_lat'] = float(df.loc[i, 'centroid_lat'])
         df.loc[i, 'centroid_lon'] = float(df.loc[i, 'centroid_lon'])
 
+
     dic = {}
     for i in range(len(df)):
         if df.loc[i, 'business'] in dic.keys():
             dic[df.loc[i, 'business']] = dic[df.loc[i, 'business']] + df.loc[i, 'infection_num']
         else:
             dic[df.loc[i, 'business']] = df.loc[i, 'infection_num']
+    # build table for dic using plotly
+    dic_table = go.Figure(
+        data=[go.Table(
+            header=dict(values=list(dic.keys()), align='left'),
+            cells=dict(values=list(dic.values()), align='left')
+        )]
+    )
+    dic_table.update_layout(
+        height=60,
+        margin=go.layout.Margin(l=0, r=0, b=0, t=0, pad=0)
+    )
 
     px.set_mapbox_access_token(
         'pk.eyJ1Ijoic2ppYW5nMjMiLCJhIjoiY2xlb3Jid2c0MDU0NTNybnZlc3Rrb2J0ayJ9.Kc5kX7FNpk4MJODTFNS-BA')
@@ -306,7 +325,7 @@ def infection_heatmap(df_new_infection, domTree):
         showlegend=True,
         margin=go.layout.Margin(l=0, r=0, b=0, t=0, pad=0),
     )
-    return fig
+    return fig, dic_table
 
 
 def exits_in_df1(df, lat, lon):

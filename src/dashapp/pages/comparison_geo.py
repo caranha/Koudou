@@ -1,10 +1,6 @@
 import dash
-import numpy
 import pandas
 from dash import html, dcc, callback, Input, Output
-import dash_bootstrap_components as dbc
-# from .public.css import *
-import plotly.express as px
 from .public.utils import *
 from .public.File_Factory import *
 
@@ -101,6 +97,13 @@ tab1_content = dbc.Card(
 
 IHM_tab1_content = dbc.Card(
     dbc.CardBody([
+        html.H5("Drag the slider to change the time range:"),
+        html.Br(),
+        dcc.RangeSlider(0, 10, value=[0, 2], allowCross=False,
+                        marks={i: str(i)+'day' for i in range(10)},
+                        id='range-slider-ihm',
+                        tooltip={"placement": "bottom", "always_visible": True}),
+        html.Div(id='range-slider-text-output'),
         html.Div(id='infection-heat-map-one')
     ]),
     className="mt-3",
@@ -161,7 +164,7 @@ tab2_content = dbc.Card(
             html.P("Heat map for infection taken place", className="card-text"),
             dbc.Tabs(
                 [
-                    dbc.Tab(IHM_tab1_content, label="Model One", id='im-random-input-one'),
+                    dbc.Tab(IHM_tab1_content, label="Model One"),
                     dbc.Tab(IHM_tab2_content, label="Model Two", id='im-random-input-two'),
                     dbc.Tab(IHM_tab3_content, label="Model Three", id='im-random-input-three'),
                 ], style={'marginTop': '5px'}
@@ -266,8 +269,15 @@ def track_infection_one(value):
 
 
 @callback(
+    Output('range-slider-text-output', 'children'),
+    [Input('range-slider-ihm', 'value')])
+def infection_heat_map_one_text(value):
+    return 'You have selected days from {} to {}.'.format(value[0], value[1])
+
+
+@callback(
     Output('infection-heat-map-one', 'children'),
-    Input('im-random-input-one', 'value')
+    [Input('range-slider-ihm', 'value')]
 )
 def infection_heat_map_one(value):
     f = ModelOne()
@@ -275,12 +285,16 @@ def infection_heat_map_one(value):
     domTree = xee.parse(r'I:\Epidemicon Research\Post-ALIFE\Koudou\src\dashapp\data\map_osm\tsukuba_area.osm')
 
     # domTree = xee.parse(os.path.join('..\data\map_osm', 'tsukuba_area.xml'))
-    heat_fig = infection_heatmap(df_new_infection, domTree)
+    heat_fig, dic_table = infection_heatmap(df_new_infection, domTree, value[0], value[1])
 
     if df_new_infection is pandas.NA:
         return html.H5("Not loaded yet, please upload new_infection.csv to model one.")
     else:
-        return dcc.Graph(figure=heat_fig)
+        return html.Div(children=[
+            dcc.Graph(figure=dic_table),
+            dcc.Graph(figure=heat_fig)
+        ])
+
 
 
 @callback(
