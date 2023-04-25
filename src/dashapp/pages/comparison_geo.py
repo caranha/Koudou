@@ -3,6 +3,8 @@ import pandas
 from dash import html, dcc, callback, Input, Output
 from .public.utils import *
 from .public.File_Factory import *
+import dash_leaflet.express as dlx
+from dash_extensions.javascript import arrow_function
 
 dash.register_page(__name__, path='/comparison_geo')
 
@@ -144,6 +146,14 @@ TM_tab3_content = dbc.Card(
     className="mt-3",
 )
 
+LB_tab1_content = dbc.Card(
+    dbc.CardBody([
+        html.H5("Test the map", id='lb-random-input-one'),
+        html.Div(id='lb-map-one')
+    ]),
+    className="mt-3",
+)
+
 
 tab2_content = dbc.Card(
     dbc.CardBody(
@@ -205,11 +215,41 @@ tab3_content = dbc.Card(
 )
 
 
+tab4_content = dbc.Card(
+    dbc.CardBody(
+        [
+            html.Div(
+                style=style_data_align_4,
+                children=[
+                    dbc.Badge(
+                        "Leaflet Map Test",
+                        color="white",
+                        text_color="warning",
+                        className="border me-1",
+                        style=style_fontSize20
+                    ),
+                ]
+            ),
+            html.Br(),
+            html.P("This is for dash leaflet map test", className="card-text"),
+            dbc.Tabs(
+                [
+                    dbc.Tab(LB_tab1_content, label="Model One", id='tm-random-input-one'),
+                    # dbc.Tab(LB_tab2_content, label="Model Two", id='tm-random-input-two'),
+                    # dbc.Tab(LB_tab3_content, label="Model Three", id='tm-random-input-three'),
+                ], style={'marginTop': '5px'}
+            )
+        ]
+    ),
+    className="mt-3",
+)
+
 tabs = dbc.Tabs(
     [
         dbc.Tab(tab1_content, label="Infection Location Statistics"),
         dbc.Tab(tab2_content, label="Infection Map"),
         dbc.Tab(tab3_content, label="Infection Transmission Route"),
+        dbc.Tab(tab4_content, label="Leaflet Map Test"),
         dbc.Tab(
             "This tab's content is never seen", label="To be developed", disabled=True
         ),
@@ -224,6 +264,26 @@ layout = html.Div(style=style_data_align_0, children=[
         ]
     ),
 ])
+
+
+@callback(
+    Output('lb-map-one', 'children'),
+    Input('lb-random-input-one', 'value'))
+def lb_map_one(value):
+    # f = ModelOne()
+    # df_new_infecion = f.new_infection
+
+    return html.Div(children=[
+        dl.Map(
+            [
+                dl.TileLayer(),
+                dl.GeoJSON(data=dlx.dicts_to_geojson([dict(lat=36.103901, lon=140.103707)] * 100), cluster=True),
+            ],
+            center=(36.103901, 140.103707),
+            zoom=15,
+            style={'width': '100%', 'height': '100vh', 'margin': "auto", "display": "block"}
+        )
+    ])
 
 
 @callback(Output('transmit-map-one', 'children'),
@@ -242,7 +302,7 @@ def track_infection_one(value):
 
 @callback(Output('transmit-map-two', 'children'),
           Input('tm-random-input-two', 'value'))
-def track_infection_one(value):
+def track_infection_two(value):
     f = ModelTwo()
     df_new_infecion = f.new_infection
     domTree = xee.parse(r'I:\Epidemicon Research\Post-ALIFE\Koudou\src\dashapp\data\map_osm\tsukuba_area.osm')
@@ -256,7 +316,7 @@ def track_infection_one(value):
 
 @callback(Output('transmit-map-three', 'children'),
           Input('tm-random-input-three', 'value'))
-def track_infection_one(value):
+def track_infection_three(value):
     f = ModelThree()
     df_new_infecion = f.new_infection
     domTree = xee.parse(r'I:\Epidemicon Research\Post-ALIFE\Koudou\src\dashapp\data\map_osm\tsukuba_area.osm')
