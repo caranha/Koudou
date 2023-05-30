@@ -1,5 +1,4 @@
 # Dashboard for Simulator Analysis
-
 ## Introduction
 The dashboard is a web tool that allows users easily analyze their log files with the uploading module. The analytical content includes geographical, 
 statistical, and visualization analysis. The users can easily compare their models with different scenario settings.

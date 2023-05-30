@@ -1,26 +1,5 @@
 ## Welcome to the simulator dashboard!
-This dashboard is used for presenting simulator model simulation processing, configurations, and result analysis.
-Here is a brief introduction about the layout of the website.
-#### About Page
-Basic information about the simulator and works.
-#### Configuration Page
-Comprehensive parameters files presented, and emphasis several key parameters.
-#### Map Page
-Map introduction.
-#### Simulator Result Page
-1. Present intermediate and final result of simulator
-   1. Start and end real time of the simulator (Simulation Duration comparing to duration inside the simulator world)
-   2. Tuned parameters of simulators
-2. Present plain log from log files
-#### Simulation Analysis
-1. Infection Page
-    1. A filter to search a single agent health condition during the infection process
-    2. DONE List all related result files using filtering
-    3. DONE Infection line chart and pie chart
-2. Evacuation Page
-    1. A filter to search a single agent every movement during the evacuation
-    2. List all related result files using filtering
-3. Geographical Page
-Map result presenting.
+This dashboard is used for presenting simulator model configurations, and analysis.
+
 
 This Dashboard is built with [Dash Plotly](https://plotly.com/dash ) & [GitHub](https://github.com/plotly/dash ), and [Bootstrap - Bootswatch](https://bootswatch.com/).

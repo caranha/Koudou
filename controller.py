@@ -40,13 +40,17 @@ class Controller():
             self.logger.write_log(key)
         self.logger.write_log("--------------------END---------------------")
         
+        '''
         if self.d_param["MAP_CACHE"] is not None and path.isfile(self.d_param["MAP_CACHE"]):
             self.logger.write_log("Found Map Cache")
             self.load_map(self.d_param["MAP_CACHE"])
         else:
             self.logger.write_log("Unable to find Map Cache")
             self.load_map(self.d_param["MAP"])
+        '''
 
+        self.load_map(self.d_param["MAP"])
+        
         if self.d_param["SIM_CONFIG"]:
             self.logger.write_log("--------------------Loading Simulation--------------------")
             self.load_sim()
@@ -175,8 +179,7 @@ class Controller():
         self.logger.add_csv_file("infection_summary.csv", header)
 
         # position
-        header = ["time", "time_stamp","home","road","restaurant","hospital","retail","workplace","business",
-        "school","university","train_station", "office","barbershop", "laboratory"]
+        header = ["time_stamp","location","count"]
         self.logger.add_csv_file("agent_position_summary.csv", header)
 
         # activity
@@ -255,7 +258,7 @@ class Controller():
         log_data = {}
         log_data["time"] = self.sim.ts.get_hour_min_str()
         log_data["time_stamp"] = self.sim.ts.step_count
-            
+        
         for k in summarized_attr.keys():
             log_data[k]   = summarized_attr[k]
 

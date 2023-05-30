@@ -30,7 +30,7 @@ def load_defaults():
 
         # EXPERIMENT
         "EXP_NAME": "default",
-        "SEED"    : 3333,
+        "SEED"    : 1111,
         "MAX_STEPS"    :   49*24*12,
 
 

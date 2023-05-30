@@ -35,6 +35,7 @@ class Logger():
     def write_csv_data(self, filename, data, id = False):
         header = self.headers[filename]
         temp = ""
+        self.write_log("Write CSV Data : " + filename + str(header))
         for x in header:
             if x is 'event_id':
                 temp += ","

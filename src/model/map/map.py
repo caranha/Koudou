@@ -89,6 +89,8 @@ class Map():
             if temp_place.centroid not in explored_places and temp_distance < distance:
                 place = self.d_evacuation_centers[evac_place_id]
                 distance = temp_distance
+
+        # TODO: check what to do if there is not available evacuation palces anymore
         if place == None:
             for p in self.d_places.values():
                 if p.centroid == home_id:

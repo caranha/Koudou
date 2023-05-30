@@ -121,12 +121,6 @@ class EvacuationModule(Module):
                         agent.get_attribute("home_node_id")    
                     )
 
-                    # TODO: check what to do if there is not available evacuation palces anymore
-                    if new_target is None:
-                        new_target = agent.get_attribute("home_node_id").lower()
-                    else:
-                        new_target = new_target.centroid
-
                     agent.set_attribute("target_evac", new_target)
                     self.log_ag_refused_evac(
                         ts,

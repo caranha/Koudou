@@ -1,12 +1,12 @@
 parameters = {
     "EXP_NAME":       "test_config_file",     # Name of the experiment, used for saving ther logs (logger not implemented yet) 
-    "MAP":            "osm_files/TX-To-TU.osm", # Path for the osm file used for building the map
+    "MAP":            "osm_files/test.osm", # Path for the osm file used for building the map
     "MAP_CACHE":      "cache/TX-To-TU.pkl", # Where to save the map cache
     "PATHFIND_CACHE": "cache/TX-pathfind.pkl", # where to save the pathfind cache
 
 
     "SEED":            101512, # Seed used for reproducing experiments
-    "N_AGENTS":        5000, # Number of agents in the simulation, the more agents, the longer it will take to execute
+    "N_AGENTS":        100, # Number of agents in the simulation, the more agents, the longer it will take to execute
     "THREADS":         8, # How many CPUs should be used for pathfinding
 
     "BUILDING_TAGS":  "config/map/tsukuba-tu-building-data.csv", # Path to the file that describes the tags to be created for untagged buildings
@@ -14,7 +14,7 @@ parameters = {
     "GRID_SIZE":      10, # Grid size used when calculating the centroid for buildings, NOT recommended to change
     "EVAC_CENTER" :   "config/map/evacuation_center.json", # Path for the file that describes where the evac centers should be
     "STEP_LENGTH" :   5, #Each step is one second,
-    "MAX_STEPS"    :   60*60*24*7*7, # This is simulating for 7 weeks (49 days 24 hours, 60 minutes, 60 seconds),
+    "MAX_STEPS"    :   60*60*24*7, # This is simulating for 7 weeks (49 days 24 hours, 60 minutes, 60 seconds),
     "LOG_LEVEL"     : "debug",
 
     "DISEASES": ["config/infection/covid.json"], # Path to the diseases that will be simualted, it will use this path and the config/infection/covid-infection.json

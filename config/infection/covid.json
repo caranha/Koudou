@@ -12,7 +12,7 @@
     },
     "initialization": {
         "type": "absolute",
-        "value": 10,
+        "value": 5,
         "state": "asymptomatic"
     },
     "attributes": {
