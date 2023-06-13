@@ -44,7 +44,7 @@ class AttributeSchedule(Attribute):
         tempstring = "[AttributeSchedule]\n"
         tempstring += self._get_object_details()
         tempstring += f"   day      : {self.day_str}\n"
-        tempString += f"   workhour : {int(self.start/3600)%24}: {_get_hour_string(self.start)} - {_get_hour_string(self.end)}\n"
+        tempstring += f"   workhour : {int(self.start/3600)%24}: {_get_hour_string(self.start)} - {_get_hour_string(self.end)}\n"
         return tempstring
 
 def _get_hour_string(time):

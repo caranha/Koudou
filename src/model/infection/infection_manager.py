@@ -46,7 +46,7 @@ def initializate_disease_on_population(disease: Disease, initialization: Dict, p
     infected_ags = rng.choice(population, qtd, replace = False)
     for ag in infected_ags:
         ag.set_attribute(disease.name, initialization["state"])
-        logger.write_log("Agent" + str(ag.agent_id) + " changed to state " + initialization["state"] + " of " + disease.name)
+        logger.write_log("Agent" + str(ag.id) + " changed to state " + initialization["state"] + " of " + disease.name)
     
 
 def infection_step(step_size: int, kd_map: Map, population: List[Agent], infection_module: Infection, rng,logger,ts):
@@ -71,7 +71,7 @@ def create_symptoms(step_size, ag: Agent, disease: Disease, rng, logger,ts):
                 data = {}
                 data["time_stamp"] = ts.step_count
                 data["disease_name"] = disease.name
-                data["agent_id"] = ag.agent_id
+                data["agent_id"] = ag.id
                 data["agent_profession"] = ag.get_attribute("profession")
                 data["agent_location"] = ag.get_attribute("location")
                 data["agent_node_id"] = ag.get_attribute("current_node_id")
@@ -87,7 +87,7 @@ def remove_symptoms(ag: Agent, disease: Disease, rng, logger, ts):
             data = {}
             data["time_stamp"] = ts.step_count
             data["disease_name"] = disease.name
-            data["agent_id"] = ag.agent_id
+            data["agent_id"] = ag.id
             data["agent_profession"] = ag.get_attribute("profession")
             data["agent_location"] = ag.get_attribute("location")
             data["agent_node_id"] = ag.get_attribute("current_node_id")
@@ -151,7 +151,7 @@ def infected_next_stage(step_size, ag: Agent, disease: Disease, rng, logger,ts):
                 data["time"] = ts.get_hour_min_str()
                 data["time_stamp"] = ts.step_count
                 data["disease_name"] = disease.name
-                data["agent_id"] = ag.agent_id
+                data["agent_id"] = ag.id
                 data["agent_profession"] = ag.get_attribute("profession")
                 data["agent_location"] = ag.get_attribute("location")
                 data["agent_node_id"] = ag.get_attribute("current_node_id")
@@ -184,7 +184,7 @@ def log(infection_type,disease,infector,infectee,logger,ts, old_mask_behavior):
     data["time_stamp"] = ts.step_count
     data["type"] = infection_type
     data["disease_name"] = disease.name
-    data["agent_id"] = infectee.agent_id
+    data["agent_id"] = infectee.id
     data["agent_profession"] = infectee.get_attribute("profession")
     data["agent_location"] = infectee.get_attribute("location")
     data["agent_node_id"] = infectee.get_attribute("current_node_id")
@@ -211,7 +211,7 @@ def log(infection_type,disease,infector,infectee,logger,ts, old_mask_behavior):
         data["source_health"] = "None"
         data["source_current_activity"] = "None"
     else:   
-        data["source_id"] = infector.agent_id
+        data["source_id"] = infector.id
         data["source_profession"] = infector.get_attribute("profession")
         data["source_location"] = infector.get_attribute("location")
         data["source_node_id"] = infector.get_attribute("current_node_id")

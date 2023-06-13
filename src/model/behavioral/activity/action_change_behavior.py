@@ -36,9 +36,9 @@ class ActionChangeBehavior(Action):
 
     @property
     def short_string(self):
-        return f"Change agent {self.agent.agent_id} behavior into {self.behavior_name}\n"
+        return f"Change agent {self.agent.id} behavior into {self.behavior_name}\n"
 
     def __str__(self):
         tempstring = "[ActionChangeBehavior]\n"
-        tempstring += f"{self.agent.agent_id} = {self.behavior_name}"
+        tempstring += f"{self.agent.id} = {self.behavior_name}"
         return tempstring

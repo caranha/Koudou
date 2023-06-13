@@ -53,7 +53,7 @@ class Draw():
         for agent in agent_list:
             lon, lat = viewport.apply(*agent.coordinate.get_lon_lat())
             r=viewport.s*0.00005
-            oval = self.canvas.create_oval(lon-r, lat-r, lon+r, lat+r, fill=agent.color, tag=agent.agent_id)
+            oval = self.canvas.create_oval(lon - r, lat - r, lon + r, lat + r, fill=agent.color, tag=agent.id)
             agent.oval = oval
 
     def move_agents(self, agent_list, viewport):

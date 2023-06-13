@@ -106,7 +106,7 @@ class EvacuationModule(Module):
 
                     self.log_ag_evacuating(
                         ts, 
-                        agent.agent_id, 
+                        agent.id,
                         evac_center_id, 
                         occupation, 
                         capacity, 
@@ -124,7 +124,7 @@ class EvacuationModule(Module):
                     agent.set_attribute("target_evac", new_target)
                     self.log_ag_refused_evac(
                         ts,
-                        agent.agent_id,
+                        agent.id,
                         evac_center_id,
                         new_target,
                         logger

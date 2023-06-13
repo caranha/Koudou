@@ -16,7 +16,7 @@ class Behavior:
 					temp_activity = {}
 					temp_activity["time"] = ts.get_hour_min_str()
 					temp_activity["time_stamp"] = ts.step_count
-					temp_activity["agent_id"] = agent.agent_id
+					temp_activity["agent_id"] = agent.id
 					temp_activity["profession"] = agent.get_attribute("profession")
 					temp_activity["location"] = agent.get_attribute("location")
 					temp_activity["current_node_id"] = agent.get_attribute("current_node_id")

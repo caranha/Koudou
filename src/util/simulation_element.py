@@ -10,6 +10,8 @@ class SimulationElement(abc.ABC):
 
     """
 
+    update_attr = {}
+
     def __init__(self):
         self.__generatePrivateAtrributes__()
         self.id = IdGen()
@@ -41,6 +43,8 @@ class SimulationElement(abc.ABC):
     def __update__(self):
         for attr in list(self.__dict__.keys()):
             if attr.startswith("_"):
+                if attr[1:] in self.update_attr.keys():
+                    self.__dict__[attr[1:]] += self.update_attr[attr[1:]]
                 self.__dict__[attr] = self.__dict__[attr[1:]]
 
 
