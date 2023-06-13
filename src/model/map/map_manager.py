@@ -10,6 +10,7 @@ from .way import Way
 from .osm_handler import OSMHandler
 from .map import Map
 from .node import Node
+from src.util.paths import fromRoot
 import numpy as np
 from typing import List
 import math
@@ -243,7 +244,7 @@ def create_types_from_csv (kd_map: Map, grid_size, csv_file_name):
 	places = [p for p in kd_map.d_places.values() if p.type is None]
 	grid = create_places_grid(kd_map, places, grid_size)
 
-	with open(csv_file_name) as csv_file:
+	with open(fromRoot(csv_file_name)) as csv_file:
 		csv_reader = csv.DictReader(csv_file, delimiter=',')
 		for row in csv_reader:
 			x, y, number, p_type = int(row["x"]), int(row["y"]), row["number"], row["type"]
@@ -455,7 +456,7 @@ def get_dist_and_closest_coord(road_start, road_destination, target_node):
 
 def generate_businesses_hours(businesses_dict, csv_file_name):
 	csv_info = {}
-	with open(csv_file_name) as csv_file:
+	with open(fromRoot(csv_file_name)) as csv_file:
 		csv_reader = csv.DictReader(csv_file, delimiter=',')
 		for row in csv_reader:
 			csv_info[row["building_type"]] = row
@@ -502,7 +503,7 @@ def generate_businesses_hours(businesses_dict, csv_file_name):
 
 def generate_evacuation_centers(kd_map, file_path):
 	evacuation_dict = {}
-	with open(file_path) as file:
+	with open(fromRoot(file_path)) as file:
 		evacuation_dict = json.load(file)["evacuation_centers"]
 	evacuation_center_dict = {}
 	for location in evacuation_dict:

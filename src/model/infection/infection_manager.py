@@ -4,6 +4,7 @@ from src.model.behavioral.attribute.attribute import Attribute
 from .infection import Infection
 from src.model.behavioral.agent import Agent
 from src.model.map.map import Map
+from src.util.paths import fromRoot
 
 from .disease import Disease
 
@@ -12,7 +13,7 @@ def initialize_infection(disease_files, population: List[Agent], rng, logger):
     diseases = []
 
     for file_name in disease_files:
-        with open(file_name) as file:
+        with open(fromRoot(file_name)) as file:
             d_config = json.load(file)
         
         d = Disease(
