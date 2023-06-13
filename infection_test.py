@@ -1,12 +1,14 @@
+import pickle
+import numpy as np
+
 from src.util.parser import load_parameters
 from src.model.behavioral.simulation import Simulation
 from src.model.infection.infection_manager import initialize_infection, infection_step
 from src.model.map.a_star import a_star_search
-import pickle
-import numpy as np
+from src.util.paths import fromRoot
 
 parameters = load_parameters("parameters/test.py")
-with open("cache/TX-To-TU.pkl", "rb") as file:
+with open(fromRoot("cache/TX-To-TU.pkl"), "rb") as file:
     kd_map = pickle.load(file)
 
 rng = np.random.default_rng(seed=101512)

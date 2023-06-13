@@ -5,6 +5,7 @@ import numpy as np
 from pathlib import Path
 from os import path, mkdir
 from src.model.map.map import Map#join, exists
+from src.util.paths import fromRoot
 
 from src.view.view import View
 from src.view.viewport import ViewPort
@@ -102,11 +103,11 @@ class Controller():
             if not path.exists("cache"):
                 mkdir("cache")
 
-            with open(path.join("cache",f"{filename}.pkl"), "wb") as file:
+            with open(fromRoot(path.join("cache",f"{filename}.pkl")), "wb") as file:
                 pickle.dump(self.map, file)
         elif fileext==".pkl":
             self.print_msg(f"Loading cached map: {filename}{fileext}")
-            with open(osm_file, "rb") as file:
+            with open(fromRoot(osm_file), "rb") as file:
                 self.map = pickle.load(file)
         else:
             self.print_msg(f"Not a valid map file")
