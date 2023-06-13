@@ -38,13 +38,30 @@ def initializate_disease_on_population(disease: Disease, initialization: Dict, p
         new_attr = Attribute(disease.name, "susceptible")
         ag.add_attribute(new_attr)
 
-
-    
     if initialization["type"] == "absolute":
         qtd = initialization["value"]
     elif initialization["type"] == "percentage":
         qtd = len(population) * initialization["value"]
     infected_ags = rng.choice(population, qtd, replace = False)
+
+    for agent in infected_ags:
+        data = {}
+        data["time"] = '00'
+        data["time_stamp"] = '00'
+        data["type"] = 'None'
+        data["disease_name"] = 'disease'
+        data["agent_id"] = agent.agent_id
+        data["agent_profession"] = agent.get_attribute("profession")
+        data["agent_location"] = agent.get_attribute("location")
+        data["agent_node_id"] = agent.get_attribute("current_node_id")
+        data["source_id"] = 'admin'
+        data["source_profession"] = 'admin'
+        data["source_location"] = 'admin'
+        data["source_node_id"] = 'admin'
+        data["current_mask"] = 'None'
+        data["next_mask"] = agent.get_attribute("mask_wearing_type")
+        logger.write_csv_data("new_infection.csv", data)
+
     for ag in infected_ags:
         ag.set_attribute(disease.name, initialization["state"])
         logger.write_log("Agent" + str(ag.agent_id) + " changed to state " + initialization["state"] + " of " + disease.name)

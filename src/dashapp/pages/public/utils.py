@@ -13,6 +13,10 @@ import time
 import math
 import dash_bootstrap_components as dbc
 from plotly.subplots import make_subplots
+import dash_leaflet as dl
+import xml.etree.ElementTree as xee
+import os
+
 
 # ---------------- global ------------------
 def timestamp_converter(timestamp):
@@ -247,6 +251,314 @@ def proportion_calculation(df):
         result_dict[location] = round(mean_count, 2)
 
     return result_dict
+
+
+def exits_in_df(df, lat, lon):
+    for i in range(len(df)):
+        if df.loc[i, 'centroid_lat'] == lat and df.loc[i, 'centroid_lon'] == lon:
+            df.loc[i, 'infection_num'] += 1
+            return True
+    return False
+
+
+def infection_heatmap(df_new_infection, domTree, start, end):
+    # delete admin infection cases
+    for i in range(len(df_new_infection)):
+        if df_new_infection.loc[i, 'source_profession'] == 'admin':
+            df_new_infection = df_new_infection.drop(i, inplace=False)
+    df_new_infection.reset_index(drop=True, inplace=True)
+    # delete useless columns
+    df_new_infection = df_new_infection.drop(['time', 'disease_name', 'agent_profession', 'source_profession', 'type',
+                                              'source_location', 'source_id', 'current_mask', 'next_mask'], axis=1)
+    # filter by time
+    steps_by_seconds = 24*60*60
+    df_new_infection = get_data_by_interval(start*steps_by_seconds, end*steps_by_seconds, df_new_infection)
+    df_new_infection.reset_index(drop=True, inplace=True)
+
+    df = pd.DataFrame(columns=['centroid_lat', 'centroid_lon', 'infection_num', 'business'], dtype=float)
+    list_node = []
+    for node in domTree.getroot().iter('node'):
+        list_node.append(node.attrib)
+
+    for i in range(len(df_new_infection)):
+        temp_id = df_new_infection.loc[i, 'agent_node_id'].split('_')[0]
+        for j in range(len(list_node)):
+            if list_node[j]['id'] == temp_id:
+                lat = list_node[j]['lat']
+                lon = list_node[j]['lon']
+                if exits_in_df(df, lat, lon):
+                    break
+                else:
+                    # insert
+                    df.loc[len(df.index)] = [lat, lon, 1, df_new_infection.loc[i, 'agent_location']]
+                    break
+
+    for i in range(len(df)):
+        df.loc[i, 'centroid_lat'] = float(df.loc[i, 'centroid_lat'])
+        df.loc[i, 'centroid_lon'] = float(df.loc[i, 'centroid_lon'])
+
+
+    dic = {}
+    for i in range(len(df)):
+        if df.loc[i, 'business'] in dic.keys():
+            dic[df.loc[i, 'business']] = dic[df.loc[i, 'business']] + df.loc[i, 'infection_num']
+        else:
+            dic[df.loc[i, 'business']] = df.loc[i, 'infection_num']
+    # build table for dic using plotly
+    dic_table = go.Figure(
+        data=[go.Table(
+            header=dict(values=list(dic.keys()), align='left'),
+            cells=dict(values=list(dic.values()), align='left')
+        )]
+    )
+    dic_table.update_layout(
+        height=60,
+        margin=go.layout.Margin(l=0, r=0, b=0, t=0, pad=0)
+    )
+
+    px.set_mapbox_access_token(
+        'pk.eyJ1Ijoic2ppYW5nMjMiLCJhIjoiY2xlb3Jid2c0MDU0NTNybnZlc3Rrb2J0ayJ9.Kc5kX7FNpk4MJODTFNS-BA')
+    fig = px.scatter_mapbox(df, lat="centroid_lat", lon="centroid_lon", hover_name="business",
+                            color="infection_num", size="infection_num",
+                            color_continuous_scale=px.colors.cyclical.IceFire, size_max=50, zoom=10)
+    fig.update_layout(
+        height=600,
+        showlegend=True,
+        margin=go.layout.Margin(l=0, r=0, b=0, t=0, pad=0),
+    )
+    return fig, dic_table
+
+
+def exits_in_df1(df, lat, lon):
+    for i in range(len(df)):
+        if df.loc[i, 'lat'] == lat and df.loc[i, 'lon'] == lon:
+            df.loc[i, 'infection_num'] += 1
+            return True
+    return False
+
+
+def find_location(loc_ana, list_node, tid, infector_id):
+    for i in range(len(list_node)):
+        if list_node[i]['id'] == tid:
+            end_lat = list_node[i]['lat']
+            end_lon = list_node[i]['lon']
+    # find start_lat and start_lon based on souce_id (infector's id, find its first infected location information)
+    for j in range(len(loc_ana)):
+        if loc_ana.loc[j, 'agent_id'] == int(infector_id):
+            start_id = loc_ana.loc[j, 'agent_node_id'].split('_')[0]
+            for k in range(len(list_node)):
+                if list_node[k]['id'] == start_id:
+                    start_lat = list_node[k]['lat']
+                    start_lon = list_node[k]['lon']
+                    return float(start_lon), float(start_lat), float(end_lon), float(end_lat)
+
+
+def find_business(lat, lon, list_node):
+    start_business = 'None'
+    return start_business
+
+
+def path_conversion(df_path, start, end):
+    start_timestamp = start * 24 * 3600
+    end_timestamp = end * 24 * 3600
+    df_path1 = df_path.loc[df_path['time'] < start_timestamp]
+    df_path2 = df_path.loc[(df_path['time'] >= start_timestamp) & (df_path['time'] < end_timestamp)]
+    df_path3 = df_path.loc[df_path['time'] >= end_timestamp]
+    return df_path1, df_path2, df_path3
+
+
+def lon_lat(df_path):
+    lons = np.empty(3 * len(df_path))
+    lons[::3] = df_path['start_lon']
+    lons[1::3] = df_path['end_lon']
+    lons[2::3] = None
+    lats = np.empty(3 * len(df_path))
+    lats[::3] = df_path['start_lat']
+    lats[1::3] = df_path['end_lat']
+    lats[2::3] = None
+    return lons, lats
+
+
+def compute_fig2(loc_ana, domTree):
+    list_node = []
+    for node in domTree.getroot().iter('node'):
+        list_node.append(node.attrib)
+
+    loc_ana = loc_ana.drop(
+        ['time', 'disease_name', 'agent_profession', 'source_profession', 'current_mask', 'next_mask'],
+        axis=1)
+
+    df = pd.DataFrame(columns=['type', 'business_name', 'lat', 'lon', 'infection_num'], dtype=float)
+    for i in range(len(loc_ana)):
+        temp_id = loc_ana.loc[i, 'agent_node_id'].split('_')[0]
+        for j in range(len(list_node)):
+            if list_node[j]['id'] == temp_id:
+                lat = list_node[j]['lat']
+                lon = list_node[j]['lon']
+                if exits_in_df1(df, lat, lon):
+                    break
+                else:
+                    # insert
+                    df.loc[len(df.index)] = [loc_ana.loc[i, 'type'], loc_ana.loc[i, 'agent_location'], lat, lon, 1]
+                    break
+
+    for i in range(len(df)):
+        df.loc[i, 'lat'] = float(df.loc[i, 'lat'])
+        df.loc[i, 'lon'] = float(df.loc[i, 'lon'])
+
+    df_path = pd.DataFrame(columns=['time', 'start_lat', 'start_lon', 'end_lat', 'end_lon', 'mask_mode',
+                                    'start_business', 'end_business'], dtype=float)
+
+    for i in range(len(loc_ana)):
+        if loc_ana.loc[i, 'source_id'] != 'admin' and loc_ana.loc[i, 'source_id'] != 'None':
+            start_lon, start_lat, end_lon, end_lat = find_location(loc_ana, list_node,
+                                                                   loc_ana.loc[i, 'agent_node_id'].split('_')[0],
+                                                                   loc_ana.loc[i, 'source_id'])
+            start_business = find_business(lat, lon, list_node)
+            df_path.loc[len(df_path.index)] = [loc_ana.loc[i, 'time_stamp'], start_lat, start_lon, end_lat, end_lon,
+                                               "MM",
+                                               start_business, loc_ana.loc[i, 'agent_location']]
+
+    df_path1, df_path2, df_path3 = path_conversion(df_path, 4, 7)
+
+    input_df = df_path
+    grouped_df = input_df.groupby(['start_lat', 'start_lon', 'end_lat', 'end_lon']).size().reset_index(name='frequency')
+    # Merge the original dataframe with the grouped dataframe on the column with same value
+    output_df = pd.merge(input_df, grouped_df, on=['start_lat', 'start_lon', 'end_lat', 'end_lon'])
+    output_df = output_df.drop_duplicates().sort_values('frequency').reset_index(drop=True)
+
+    # fig1
+    # Draw
+    fig1 = go.Figure()
+
+    fig1.add_trace(go.Scattergeo(
+        locationmode='ISO-3',
+        lon=df['lon'],
+        lat=df['lat'],
+        hoverinfo='location',
+        text=df['business_name'],
+        mode='markers',
+        marker=dict(
+            size=2,
+            color='rgb(255, 0, 0)',
+            line=dict(
+                width=3,
+                color='rgba(68, 68, 68, 0)'
+            )
+        )))
+
+    for i in range(len(output_df)):
+        fig1.add_trace(
+            go.Scattergeo(
+                lon=[output_df['start_lon'][i], output_df['end_lon'][i]],
+                lat=[output_df['start_lat'][i], output_df['end_lat'][i]],
+                mode='lines',
+                line=dict(width=1, color='red'),
+                opacity=float(output_df['frequency'][i]) / float(output_df['frequency'].max()),
+            )
+        )
+
+    fig1.update_layout(
+        title_text='Infection Route Tracking <br>(Hover for location name)',
+        showlegend=True,
+        geo=go.layout.Geo(
+            projection_type='patterson',
+            showland=True,
+            landcolor='rgb(243, 243, 243)',
+            countrycolor='rgb(204, 204, 204)',
+        ),
+        height=700,
+    )
+
+    fig1.update_geos(
+        bgcolor="aliceblue",
+        center_lat=36.103225,
+        center_lon=140.103986,
+        projection_scale=1500,
+        visible=True,
+        countrywidth=5
+    )
+
+    # Draw fig2
+    fig2 = go.Figure()
+
+    fig2.add_trace(go.Scattergeo(
+        locationmode='ISO-3',
+        lon=df['lon'],
+        lat=df['lat'],
+        hoverinfo='text',
+        text=df['business_name'],
+        mode='text',
+        marker=dict(
+            size=2,
+            color='rgb(255, 0, 0)',
+            line=dict(
+                width=3,
+                color='rgba(68, 68, 68, 0)'
+            )
+        )))
+
+    lons, lats = lon_lat(df_path1)
+
+    fig2.add_trace(
+        go.Scattergeo(
+            locationmode='geojson-id',
+            lon=lons,
+            lat=lats,
+            mode='lines',
+            line=dict(width=1, color='green'),
+            opacity=1
+        )
+    )
+
+    lons, lats = lon_lat(df_path2)
+
+    fig2.add_trace(
+        go.Scattergeo(
+            locationmode='geojson-id',
+            lon=lons,
+            lat=lats,
+            mode='lines',
+            line=dict(width=1, color='red'),
+            opacity=1
+        )
+    )
+
+    lons, lats = lon_lat(df_path3)
+
+    fig2.add_trace(
+        go.Scattergeo(
+            locationmode='geojson-id',
+            lon=lons,
+            lat=lats,
+            mode='lines',
+            line=dict(width=1, color='blue'),
+            opacity=1
+        )
+    )
+
+    fig2.update_layout(
+        title_text='Infection Route Tracking <br>(Hover for location name)',
+        showlegend=True,
+        geo=go.layout.Geo(
+            projection_type='patterson',
+            showland=True,
+            landcolor='rgb(243, 243, 243)',
+            countrycolor='rgb(204, 204, 204)',
+        ),
+        height=700,
+    )
+
+    fig2.update_geos(
+        bgcolor="aliceblue",
+        center_lat=36.103225,
+        center_lon=140.103986,
+        projection_scale=1500,
+        visible=True,
+        countrywidth=5
+    )
+
+    return fig1, fig2
 
 
 # ---------------- upload ------------------
@@ -486,7 +798,7 @@ def IA_return_random_activity_history_list(model, random_id):
         ),
     ]
 
-    if random_id is "":
+    if random_id == "":
         disease_transition_pd = agent_id_filter(df_disease_transition, infection_agent_id_list[0])
         activity_history_pd = agent_id_filter(df_activity_history, infection_agent_id_list[0])
     else:
@@ -580,7 +892,7 @@ def IA_return_random_activity_history_table(model, random_id):
     df_new_infection = model.new_infection
     df_activity_history = model.activity_history
     infection_agent_id_list = build_infection_agent_list(df_new_infection)
-    if random_id is "":
+    if random_id == "":
         agent_pd = agent_id_filter(df_activity_history, infection_agent_id_list[0])
     else:
         agent_pd = agent_id_filter(df_activity_history, random_id)
@@ -625,7 +937,7 @@ def IA_return_random_disease_transition_table(model, random_id):
     df_new_infection = model.new_infection
     df_disease_transition = model.disease_transition
     infection_agent_id_list = build_infection_agent_list(df_new_infection)
-    if random_id is "":
+    if random_id == "":
         agent_pd = agent_id_filter(df_disease_transition, infection_agent_id_list[0])
     else:
         agent_pd = agent_id_filter(df_disease_transition, random_id)
