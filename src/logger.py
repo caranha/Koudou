@@ -76,3 +76,11 @@ class Logger():
         return {
             
         } [level]
+
+class NoLog:
+    def write_log(self, *args):
+        return
+
+    def write_csv_data(self, *args):
+        return
+

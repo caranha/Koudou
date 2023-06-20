@@ -1,4 +1,11 @@
 class TimeStamp:
+    instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if not cls.instance:
+            cls.instance = object.__new__(TimeStamp)
+            cls.instance.__init__(*args, **kwargs)
+        return cls.instance
 
     def __init__(self, step_count=0):
         self.step_count = step_count
