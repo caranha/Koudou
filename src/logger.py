@@ -78,9 +78,9 @@ class Logger():
         } [level]
 
 class NoLog:
-    def write_log(self, *args):
+    def write_log(self, *args, **kwargs):
         return
 
-    def write_csv_data(self, *args):
+    def write_csv_data(self, *args, **kwargs):
         return
 

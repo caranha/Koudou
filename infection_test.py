@@ -7,6 +7,7 @@ from src.model.infection.infection_manager import initialize_infection, infectio
 from src.model.map.a_star import a_star_search
 from src.util.paths import fromRoot
 from src.logger import NoLog
+from src.util.time_stamp import TimeStamp
 
 
 def infection_test():
@@ -28,7 +29,7 @@ def infection_test():
     step_size = 300
 
     for x in range(0, day):
-        infection_step(step_size, kd_map, sim.agents, infection, rng, logger, x*step_size)
+        infection_step(step_size, kd_map, sim.agents, infection, rng, logger, TimeStamp(x*step_size))
 
     infected_ags = [ag for ag in sim.agents if ag.get_attribute("covid") != "susceptible"]
     print(len(infected_ags))
