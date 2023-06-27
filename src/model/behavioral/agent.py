@@ -63,22 +63,22 @@ class Agent:
 			tempstring +=  f"  - {x} = {self.attributes[x].get_value}\n"
 		return tempstring
 
-	def attribute_step(self,kd_sim,kd_map,ts,step_length,rng,logger):
+	def attribute_step(self,kd_sim,kd_map,step_count,step_length,rng,logger):
 		#update attribute
 		for attr in self.attributes:
-			self.attributes[attr].step(kd_sim,kd_map,ts,step_length,rng,self)
+			self.attributes[attr].step(kd_sim,kd_map,step_count,step_length,rng,self)
 
-	def behavior_step(self,kd_sim,kd_map,ts,step_length,rng,logger):
+	def behavior_step(self,kd_sim,kd_map,step_count,step_length,rng,logger):
 		# if idle check action
 		if len(self.actions) == 0:
-			return self.current_behavior.step(kd_sim,kd_map,ts,step_length,rng,self,logger) #get actions
+			return self.current_behavior.step(kd_sim,kd_map,step_count,step_length,rng,self,logger) #get actions
 		return []
 
-	def action_step(self,kd_sim,kd_map,ts,step_length,rng,logger):
+	def action_step(self,kd_sim,kd_map,step_length,rng,logger):
 		leftover = step_length
 		while len(self.actions) > 0:
 			act = self.actions[0]
-			leftover = act.step(kd_sim,kd_map,ts,leftover,rng)
+			leftover = act.step(kd_sim, kd_map, leftover, rng)
 			if act.is_finished:
 				self.actions.pop(0)
 			else:

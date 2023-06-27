@@ -48,7 +48,7 @@ class Attribute:
         warnings.warn(tempstring)
 
     # todo: this func just cast types, shouldnt it update the values ionstead?
-    def step(self,kd_sim,kd_map,ts,step_length,rng,agent):
+    def step(self,kd_sim,kd_map,step_count,step_length,rng,agent):
         self._cast_value() # just to make sure the data is safe
 
     def _get_object_details(self):

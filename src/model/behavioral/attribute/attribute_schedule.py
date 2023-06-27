@@ -1,4 +1,5 @@
 from .attribute import Attribute
+from src.util import time_stamp as ts
 
 class AttributeSchedule(Attribute):
     """
@@ -27,11 +28,11 @@ class AttributeSchedule(Attribute):
             raise ValueError()
         self.day_str = day_str
 
-    def step(self,kd_sim,kd_map,ts,step_length,rng,agent):
+    def step(self,kd_sim,kd_map,step_count,step_length,rng,agent):
         self.value = False
-        if self.repeat and ts.get_day_of_week_str() == self.day_str and self.start <= ts.get_time_only() < self.end:
+        if self.repeat and ts.get_day_of_week_str(step_count) == self.day_str and self.start <= ts.get_time_only(step_count) < self.end:
             self.value = True
-        elif self.start <= ts.step_count < self.end:
+        elif self.start <= step_count < self.end:
             self.value = True
         else:
             self.value = False
@@ -44,7 +45,7 @@ class AttributeSchedule(Attribute):
         tempstring = "[AttributeSchedule]\n"
         tempstring += self._get_object_details()
         tempstring += f"   day      : {self.day_str}\n"
-        tempString += f"   workhour : {int(self.start/3600)%24}: {_get_hour_string(self.start)} - {_get_hour_string(self.end)}\n"
+        tempstring += f"   workhour : {int(self.start/3600)%24}: {_get_hour_string(self.start)} - {_get_hour_string(self.end)}\n"
         return tempstring
 
 def _get_hour_string(time):
