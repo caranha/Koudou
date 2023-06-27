@@ -8,7 +8,7 @@ class ActionMove(Action):
     Properties:
         - name      : (string-inherited)
     """
-    def __init__(self,agent,kd_map,destination_string,rng,ts):
+    def __init__(self,agent,kd_map,destination_string,rng,step_count):
         """
         [Constructor]
         Initialize a wait action
@@ -22,7 +22,6 @@ class ActionMove(Action):
         temp = destination_string
         temp =temp.replace(")", "")
         self.destination_string = destination_string
-        self.ts = ts
         self.sequence = []
         self.agent = agent
         self.finished = False
@@ -61,7 +60,7 @@ class ActionMove(Action):
 
             if self.typing == "destination_type":
                 self.target_type = temp
-                self.destination = kd_map.get_random_business(temp, 1, rng,time_stamp = ts, only_open = True)[0].node_id
+                self.destination = kd_map.get_random_business(temp, 1, rng, step_count= step_count, only_open = True)[0].node_id
             elif self.typing == "destination_id":
                 self.destination = temp
         self.reseted = False
@@ -70,12 +69,12 @@ class ActionMove(Action):
         self.sequence = self.sequence[:1]
         self.reseted = True
 
-    def step(self,kd_sim,kd_map,ts,step_length,rng):
+    def step(self, kd_sim, kd_map, step_length, rng):
         # if have action do it
         leftover = step_length
         while len(self.sequence) > 0:
             mov_vec = self.sequence[0]
-            leftover = mov_vec.step(self.agent,leftover,kd_map) 
+            leftover = mov_vec.step(self.agent,leftover,kd_map)
             if not mov_vec.is_finished:
                 break
             else:

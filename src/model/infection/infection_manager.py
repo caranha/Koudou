@@ -5,6 +5,7 @@ from .infection import Infection
 from src.model.behavioral.agent import Agent
 from src.model.map.map import Map
 from src.util.paths import fromRoot
+from src.util import time_stamp as ts
 
 from .disease import Disease
 
@@ -67,18 +68,18 @@ def initializate_disease_on_population(disease: Disease, initialization: Dict, p
         logger.write_log("Agent" + str(ag.agent_id) + " changed to state " + initialization["state"] + " of " + disease.name)
     
 
-def infection_step(step_size: int, kd_map: Map, population: List[Agent], infection_module: Infection, rng,logger,ts):
+def infection_step(step_size: int, kd_map: Map, population: List[Agent], infection_module: Infection, rng, logger, step_count):
     # next state of the infected agents
     for disease in infection_module.diseases.values():
         infected_agents = [ag for ag in population if ag.get_attribute(disease.name) != "susceptible"]
         for ag in infected_agents:
-            infected_next_stage(step_size, ag, disease, rng, logger,ts)
+            infected_next_stage(step_size, ag, disease, rng, logger, step_count)
 
     # infection to healthy agents
     for disease in infection_module.diseases.values():
-        disease_transmission_verbose(step_size, kd_map, population, disease, rng, logger,ts)
+        disease_transmission_verbose(step_size, kd_map, population, disease, rng, logger, step_count)
 
-def create_symptoms(step_size, ag: Agent, disease: Disease, rng, logger,ts):
+def create_symptoms(step_size, ag: Agent, disease: Disease, rng, logger, step_count):
     for symptom, sympt_attr in disease.symptoms.items():
         if (not ag.has_attribute(symptom)):
             symptom_chance = apply_time_scale(step_size, sympt_attr["scale"], sympt_attr["probability"])
@@ -87,7 +88,7 @@ def create_symptoms(step_size, ag: Agent, disease: Disease, rng, logger,ts):
                 new_attr = Attribute(symptom, "symptomatic")
                 ag.add_attribute(new_attr)
                 data = {}
-                data["time_stamp"] = ts.step_count
+                data["time_stamp"] = step_count
                 data["disease_name"] = disease.name
                 data["agent_id"] = ag.agent_id
                 data["agent_profession"] = ag.get_attribute("profession")
@@ -98,12 +99,12 @@ def create_symptoms(step_size, ag: Agent, disease: Disease, rng, logger,ts):
                 data['mask_state'] = ag.get_attribute('mask_wearing_type')
                 logger.write_csv_data("symptom.csv", data)
 
-def remove_symptoms(ag: Agent, disease: Disease, rng, logger, ts):
+def remove_symptoms(ag: Agent, disease: Disease, rng, logger, step_count):
     for symptom in disease.symptoms:
         if (ag.has_attribute(symptom)):
             ag.update_attribute(symptom, "asymptomatic")
             data = {}
-            data["time_stamp"] = ts.step_count
+            data["time_stamp"] = step_count
             data["disease_name"] = disease.name
             data["agent_id"] = ag.agent_id
             data["agent_profession"] = ag.get_attribute("profession")
@@ -150,12 +151,12 @@ def mask_behavior_determine(ag: Agent, disease: Disease, rng):
 def false_PCR_test():
     pass
 
-def infected_next_stage(step_size, ag: Agent, disease: Disease, rng, logger,ts):
+def infected_next_stage(step_size, ag: Agent, disease: Disease, rng, logger, step_count):
     current_state = ag.get_attribute(disease.name)
     if (current_state == "symptomatic"):
-        create_symptoms(step_size, ag, disease, rng, logger, ts)
+        create_symptoms(step_size, ag, disease, rng, logger, step_count)
     elif (current_state == "recovered"):
-        remove_symptoms(ag, disease, rng, logger, ts)
+        remove_symptoms(ag, disease, rng, logger, step_count)
     next_state = current_state
     if current_state in disease.transitions:
         rand_value = rng.uniform(0.0,1.0,1)[0]
@@ -166,8 +167,8 @@ def infected_next_stage(step_size, ag: Agent, disease: Disease, rng, logger,ts):
             if rand_value < previous_chances + chance:
                 next_state = compartiment
                 data = {}
-                data["time"] = ts.get_hour_min_str()
-                data["time_stamp"] = ts.step_count
+                data["time"] = ts.get_hour_min_str(step_count)
+                data["time_stamp"] = step_count
                 data["disease_name"] = disease.name
                 data["agent_id"] = ag.agent_id
                 data["agent_profession"] = ag.get_attribute("profession")
@@ -196,10 +197,10 @@ def apply_time_scale(step_size, time_scale, chance):
         return chance*step_size/(60*60*24)
 
 
-def log(infection_type,disease,infector,infectee,logger,ts, old_mask_behavior):
+def log(infection_type,disease,infector,infectee,logger,step_count, old_mask_behavior):
     data = {}
-    data["time"] = ts.get_hour_min_str()
-    data["time_stamp"] = ts.step_count
+    data["time"] = ts.get_hour_min_str(step_count)
+    data["time_stamp"] = step_count
     data["type"] = infection_type
     data["disease_name"] = disease.name
     data["agent_id"] = infectee.agent_id
@@ -243,7 +244,7 @@ def log(infection_type,disease,infector,infectee,logger,ts, old_mask_behavior):
         data["source_current_activity"] = infector.previous_activity
     logger.write_csv_data("new_infection.csv", data)
 
-def disease_transmission(step_size: int, kd_map: Map, population: List[Agent], disease: Disease, rng, logger, ts):
+def disease_transmission(step_size: int, kd_map: Map, population: List[Agent], disease: Disease, rng, logger, step_count):
     infected_ags = [ag for ag in population if ag.get_attribute(disease.name) in disease.infectious_states]
     #ags_by_location = {ag.get_attribute("current_node_id"): [] for ag in population}
     ags_by_location = {}
@@ -254,15 +255,15 @@ def disease_transmission(step_size: int, kd_map: Map, population: List[Agent], d
     for ag in infected_ags:
         loc = ag.get_attribute("current_node_id")
         if kd_map.is_businesses_node(loc):
-            business_infection(step_size, ag, ags_by_location[loc], disease, rng, logger, ts)
+            business_infection(step_size, ag, ags_by_location[loc], disease, rng, logger, step_count)
         elif kd_map.is_residences_node(loc):
-            residence_infection(step_size, ag, ags_by_location[loc], disease, rng, logger, ts)
+            residence_infection(step_size, ag, ags_by_location[loc], disease, rng, logger, step_count)
         elif kd_map.is_roads_node(loc):
-            road_infection(step_size, kd_map, ag, ags_by_location, disease, rng, logger, ts)
+            road_infection(step_size, kd_map, ag, ags_by_location, disease, rng, logger, step_count)
         else:
-            other_infection(step_size,ag, ags_by_location[loc], disease, rng, logger, ts)
+            other_infection(step_size, ag, ags_by_location[loc], disease, rng, logger, step_count)
 
-def disease_transmission_verbose(step_size: int, kd_map: Map, population: List[Agent], disease: Disease, rng, logger, ts):
+def disease_transmission_verbose(step_size: int, kd_map: Map, population: List[Agent], disease: Disease, rng, logger, step_count):
 
     # collect susceptible agents and group by location- print out purpose
     infected_ags_by_location = {}
@@ -284,7 +285,7 @@ def disease_transmission_verbose(step_size: int, kd_map: Map, population: List[A
                 susceptible_ags_by_location[ag.get_attribute("current_node_id")] = []
             susceptible_ags_by_location[ag.get_attribute("current_node_id")].append(ag)
 
-    off_map_infection(step_size, off_map, disease, rng, logger,ts)
+    off_map_infection(step_size, off_map, disease, rng, logger, step_count)
 
     # loop by location so we could see
     for loc in infected_ags_by_location:
@@ -295,15 +296,15 @@ def disease_transmission_verbose(step_size: int, kd_map: Map, population: List[A
         # infect susceptible agents when they stay with infected agents at the same node
         for infector in infected_ag:
             if kd_map.is_businesses_node(loc):
-                business_infection(step_size, infector, susceptible_ags, disease, rng, logger, ts)
+                business_infection(step_size, infector, susceptible_ags, disease, rng, logger, step_count)
             elif kd_map.is_residences_node(loc):
-                residence_infection(step_size, infector, susceptible_ags, disease, rng, logger, ts)
+                residence_infection(step_size, infector, susceptible_ags, disease, rng, logger, step_count)
             elif kd_map.is_roads_node(loc):
-                road_infection(step_size, kd_map, infector, susceptible_ags_by_location, disease, rng, logger, ts)
+                road_infection(step_size, kd_map, infector, susceptible_ags_by_location, disease, rng, logger, step_count)
             else:
-                other_infection(step_size,infector, susceptible_ags, disease, rng, logger, ts)
+                other_infection(step_size, infector, susceptible_ags, disease, rng, logger, step_count)
 
-def business_infection(step_size, infector:Agent, ag_same_location: List[Agent], disease, rng, logger,ts):
+def business_infection(step_size, infector:Agent, ag_same_location: List[Agent], disease, rng, logger, step_count):
     infection_attr = disease.infection_method["businesses"]
     scale = infection_attr["scale"]
     prob = infection_attr["probability"]
@@ -316,9 +317,9 @@ def business_infection(step_size, infector:Agent, ag_same_location: List[Agent],
             old_mask_behavior = ag.get_attribute("mask_wearing_type")
             ag = mask_behavior_determine(ag, disease, rng)
             ag.set_attribute(disease.name, disease.starting_state)
-            log("business",disease,infector,ag,logger,ts, old_mask_behavior)
+            log("business", disease, infector, ag, logger, step_count, old_mask_behavior)
 
-def residence_infection(step_size,infector:Agent, ag_same_location: List[Agent], disease, rng, logger,ts):
+def residence_infection(step_size, infector:Agent, ag_same_location: List[Agent], disease, rng, logger, step_count):
     infection_attr = disease.infection_method["residences"]
     scale = infection_attr["scale"]
     prob = infection_attr["probability"]
@@ -337,9 +338,9 @@ def residence_infection(step_size,infector:Agent, ag_same_location: List[Agent],
             old_mask_behavior = ag.get_attribute("mask_wearing_type")
             ag = mask_behavior_determine(ag, disease, rng)
             ag.set_attribute(disease.name, disease.starting_state)
-            log("residential",disease, infector,ag,logger,ts, old_mask_behavior)
+            log("residential", disease, infector, ag, logger, step_count, old_mask_behavior)
 
-def off_map_infection(step_size, ag_same_location: List[Agent], disease, rng, logger,ts):
+def off_map_infection(step_size, ag_same_location: List[Agent], disease, rng, logger, step_count):
     infection_attr = disease.infection_method["off_map"]
     scale = infection_attr["scale"]
     prob = infection_attr["probability"]
@@ -350,9 +351,9 @@ def off_map_infection(step_size, ag_same_location: List[Agent], disease, rng, lo
             old_mask_behavior = ag.get_attribute("mask_wearing_type")
             ag = mask_behavior_determine(ag, disease, rng)
             ag.set_attribute(disease.name, disease.starting_state)
-            log("off_map",disease, None,ag,logger,ts, old_mask_behavior)
+            log("off_map", disease, None, ag, logger, step_count, old_mask_behavior)
 
-def other_infection(step_size, infector:Agent, ag_same_location: List[Agent], disease, rng, logger,ts):
+def other_infection(step_size, infector:Agent, ag_same_location: List[Agent], disease, rng, logger, step_count):
     infection_attr = disease.infection_method["other"]
     scale = infection_attr["scale"]
     prob = infection_attr["probability"]
@@ -366,9 +367,9 @@ def other_infection(step_size, infector:Agent, ag_same_location: List[Agent], di
             old_mask_behavior = ag.get_attribute("mask_wearing_type")
             ag = mask_behavior_determine(ag, disease, rng)
             ag.set_attribute(disease.name, disease.starting_state)
-            log("other",disease, infector,ag,logger,ts, old_mask_behavior)
+            log("other", disease, infector, ag, logger, step_count, old_mask_behavior)
   
-def road_infection(step_size, kd_map: Map, infected_ag, ags_by_location, disease, rng, logger,ts):
+def road_infection(step_size, kd_map: Map, infected_ag, ags_by_location, disease, rng, logger, step_count):
     infection_attr = disease.infection_method["roads"]
     scale = infection_attr["scale"]
     gradient = infection_attr["gradient_by_distance"]
@@ -394,5 +395,5 @@ def road_infection(step_size, kd_map: Map, infected_ag, ags_by_location, disease
             old_mask_behavior = ag.get_attribute("mask_wearing_type")
             ag = mask_behavior_determine(ag, disease, rng)
             ag.set_attribute(disease.name, disease.starting_state)
-            log("on_the_road",disease, infected_ag,ag,logger,ts, old_mask_behavior)
+            log("on_the_road", disease, infected_ag, ag, logger, step_count, old_mask_behavior)
 
