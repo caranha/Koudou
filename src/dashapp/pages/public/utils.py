@@ -5,7 +5,7 @@ import pandas as pd
 from dash import html, dash_table
 import numpy as np
 import parameters.default as defaultParam
-from src.util.time_stamp import TimeStamp
+from src.util import time_stamp as ts
 from collections import Counter
 import plotly.express as px
 from .css import *
@@ -20,9 +20,8 @@ import os
 
 # ---------------- global ------------------
 def timestamp_converter(timestamp):
-    ts = TimeStamp(timestamp)
-    time = '[' + str(ts.get_week()) + ' week ' + str(ts.get_day_of_week()) + ' days ' + str(ts.get_hour_min_str()) \
-           + ':' + str(ts.get_second()) + ']'
+    time = '[' + str(ts.get_week(timestamp)) + ' week ' + str(ts.get_day_of_week(timestamp)) + ' days ' + str(ts.get_hour_min_str(timestamp)) \
+           + ':' + str(ts.get_second(timestamp)) + ']'
     return time
 
 

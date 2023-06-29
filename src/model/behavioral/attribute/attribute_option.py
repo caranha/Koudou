@@ -39,7 +39,7 @@ class AttributeOption(Attribute):
                 tempstring += f" - {option['value']}\n"
             raise(ValueError(tempstring))
 
-    def step(self,kd_sim,kd_map,ts,step_length,rng,agent):
+    def step(self,kd_sim,kd_map,step_count,step_length,rng,agent):
         pass
 
     def __str__(self):

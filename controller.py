@@ -6,6 +6,7 @@ from pathlib import Path
 from os import path, mkdir
 from src.model.map.map import Map#join, exists
 from src.util.paths import fromRoot
+from src.util import time_stamp as ts
 
 from src.view.view import View
 from src.view.viewport import ViewPort
@@ -119,7 +120,7 @@ class Controller():
         self.view.draw_initial_osm_map(self.map)
         self.view.draw_initial_agents(self.sim.agents)
         
-        self.view.update_clock(self.sim.ts.get_hour_min_str())
+        self.view.update_clock(ts.get_hour_min_str(self.sim.step_count))
         self.view.set_btn_funcs(
             self.rng,
             self.sim.agents,
@@ -240,8 +241,8 @@ class Controller():
         for h in health_header:
             log_data[h] = summarized_attr[h] if h in summarized_attr else 0
         
-        log_data["time"] = self.sim.ts.get_hour_min_str()
-        log_data["time_stamp"] = self.sim.ts.step_count
+        log_data["time"] = ts.get_hour_min_str(self.sim.step_count)
+        log_data["time_stamp"] = self.sim.step_count
         self.logger.write_csv_data("infection_summary.csv", log_data)
 
         # mask summary
@@ -250,15 +251,15 @@ class Controller():
         mask_header = ["time", "time_stamp", "no_mask", "surgical_mask", "n95_mask"]
         for h in mask_header:
             mask_log_data[h] = summarized_mask_attr[h] if h in summarized_mask_attr else 0
-        mask_log_data["time"] = self.sim.ts.get_hour_min_str()
-        mask_log_data["time_stamp"] = self.sim.ts.step_count
+        mask_log_data["time"] = ts.get_hour_min_str(self.sim.step_count)
+        mask_log_data["time_stamp"] = self.sim.step_count
         self.logger.write_csv_data("mask_summary.csv", mask_log_data)
 
         # agent position
         summarized_attr = self.sim.summarized_attribute("location")
         log_data = {}
-        log_data["time"] = self.sim.ts.get_hour_min_str()
-        log_data["time_stamp"] = self.sim.ts.step_count
+        log_data["time"] = ts.get_hour_min_str(self.sim.step_count)
+        log_data["time_stamp"] = self.sim.step_count
         
         for k in summarized_attr.keys():
             log_data[k]   = summarized_attr[k]
@@ -273,7 +274,7 @@ class Controller():
         # self.update_view() #todo: create an update loop, where we add move methods
         if self.d_param["USE_VIEW"]:
             self.view.move_agents(self.sim.agents)
-            self.view.update_clock(self.sim.ts.get_hour_min_str())
+            self.view.update_clock(ts.get_hour_min_str(self.sim.step_count))
 
         # print("Done!", flush=True)
         self.thread_finished = True
