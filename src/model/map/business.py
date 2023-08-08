@@ -1,6 +1,6 @@
 import itertools
 from typing import Dict, List, Tuple
-from src.util.time_stamp import TimeStamp
+from src.util import time_stamp as ts
 
 class Business:
     idCounter = itertools.count().__next__
@@ -31,10 +31,10 @@ class Business:
         t = (open_hour, close_hour)
         self.working_hours[day].append(t)
 
-    def is_open(self, t: TimeStamp):
-        day = t.get_day_of_week_str()
-        t_hour = t.get_hour()
-        t_min = t.get_minute()
+    def is_open(self, step_count):
+        day = ts.get_day_of_week_str(step_count)
+        t_hour = ts.get_hour(step_count)
+        t_min = ts.get_minute(step_count)
         for start, finish in self.working_hours[day]:
             if start==finish:
                 #Means it is open 24 hours

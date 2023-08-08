@@ -1,4 +1,5 @@
 from src.model.behavioral.module import Module
+from src.util import time_stamp as ts
 class EvacuationModule(Module):
 
     def __init__(self, distance, share_information_chance, logger):
@@ -40,7 +41,7 @@ class EvacuationModule(Module):
             agent.force_reset()
 
     #Share ERI (Evacuation Route Information)
-    def share_info(self,kd_sim,kd_map,ts,step_length,rng,logger):
+    def share_info(self,kd_sim,kd_map,step_count,step_length,rng,logger):
         sources = {}
         recipients = {}
         for agent in kd_sim.agents: 
@@ -71,7 +72,7 @@ class EvacuationModule(Module):
                         recipient.set_attribute("know_evac",True)
 
     # mark agents that arrived at evacuation point as evacuated
-    def evacuate(self,kd_sim,kd_map,ts,step_length,rng,logger):
+    def evacuate(self, kd_sim, kd_map, step_count, step_length, rng, logger):
         for evac_center_id in kd_map.d_evacuation_centers:
             evac_center =  kd_map.d_evacuation_centers[evac_center_id]
             capacity = int(evac_center.evacuation_attr["capacity"])
@@ -105,7 +106,7 @@ class EvacuationModule(Module):
                     self.total_evac += 1
 
                     self.log_ag_evacuating(
-                        ts, 
+                        step_count,
                         agent.agent_id, 
                         evac_center_id, 
                         occupation, 
@@ -123,19 +124,19 @@ class EvacuationModule(Module):
 
                     agent.set_attribute("target_evac", new_target.centroid)
                     self.log_ag_refused_evac(
-                        ts,
+                        step_count,
                         agent.agent_id,
                         evac_center_id,
                         new_target,
                         logger
                     )
 
-    def log_ag_evacuating(self, ts, ag_id, evac_id, occupation, capacity, logger):
-        log_txt = f"{ts.get_hour_min_str()}: ag {ag_id} evacuated at {evac_id}"
+    def log_ag_evacuating(self, step_count, ag_id, evac_id, occupation, capacity, logger):
+        log_txt = f"{ts.get_hour_min_str(step_count)}: ag {ag_id} evacuated at {evac_id}"
         logger.write_log(log_txt, filename=self.logger_file)
 
         data = {
-            "time_stamp": ts.step_count,
+            "time_stamp": step_count,
             "ag_id": ag_id,
             "evac_point_id": evac_id,
             "evac_occupation": occupation,
@@ -145,12 +146,12 @@ class EvacuationModule(Module):
 
         logger.write_csv_data("evacuation.csv", data)
 
-    def log_ag_refused_evac(self, ts, ag_id, refused_evac_id, new_evac, logger):
-        log_txt = f"{ts.get_hour_min_str()}: ag {ag_id} refused entry at {refused_evac_id}, now going to {new_evac}"
+    def log_ag_refused_evac(self, step_count, ag_id, refused_evac_id, new_evac, logger):
+        log_txt = f"{ts.get_hour_min_str(step_count)}: ag {ag_id} refused entry at {refused_evac_id}, now going to {new_evac}"
         logger.write_log(log_txt, filename=self.logger_file)
 
         data = {
-            "time_stamp": ts.step_count, 
+            "time_stamp": step_count,
             "ag_id": ag_id, 
             "refused_evac_id": refused_evac_id,
             "new_evac": new_evac
@@ -160,14 +161,14 @@ class EvacuationModule(Module):
 
 
     # triggered once when the evacuation begin
-    def step(self,kd_sim,kd_map,ts,step_length,rng,logger):
+    def step(self, kd_sim, kd_map, step_count, step_length, rng, logger):
         if (kd_sim.get_attribute("evacuation")):
             if not self.triggered:
                 print("Evacuation started!")
                 #reset agent activities
                 self.reset_agents_actions(kd_sim)
-            self.share_info(kd_sim,kd_map,ts,step_length,rng,logger)
-            self.evacuate(kd_sim,kd_map,ts,step_length,rng,logger)
+            self.share_info(kd_sim, kd_map, step_count, step_length, rng, logger)
+            self.evacuate(kd_sim, kd_map, step_count, step_length, rng, logger)
         else:
             if self.triggered:
                 print("Evacuation Finished!")

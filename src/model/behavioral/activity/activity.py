@@ -29,7 +29,7 @@ class Activity:
 		self.actions.append(action)
 		self.actions_arr.append(action_arr)
 
-	def check_conditions(self,agent,kd_sim, kd_map, ts,rng):
+	def check_conditions(self,agent,kd_sim, kd_map, step_count, rng):
 		result = True
 		command = self.command.lower()
 
@@ -49,12 +49,12 @@ class Activity:
 
 		for action in self.actions_arr:
 			if action[0]=="move" and "id)" not in action[1] and "!" not in action[1]:
-				destination = kd_map.get_random_business(action[1], 1, rng ,time_stamp = ts, only_open = True)
+				destination = kd_map.get_random_business(action[1], 1, rng, step_count= step_count, only_open = True)
 				if len(destination) == 0:
 					return False
 		return True
 
-	def generate_actions(self,agent,kd_map,ts,rng):
+	def generate_actions(self,agent,kd_map,step_count,rng):
 		actions = []
 		for x in self.actions:
 			temp = x.split(":")
@@ -62,7 +62,7 @@ class Activity:
 			if (temp[0].lower() == "wait"):
 				actions.append(ActionWait(agent,temp[1],rng))
 			elif (temp[0].lower()=="move"):
-				actions.append(ActionMove(agent,kd_map,temp[1],rng,ts))
+				actions.append(ActionMove(agent,kd_map,temp[1],rng,step_count))
 			elif (temp[0].lower()=="modify_attribute"):
 				actions.append(ActionModifyAttribute(agent,temp[1]))
 			elif (temp[0].lower()=="change_behavior"):

@@ -46,7 +46,7 @@ class ActionWait(Action):
         self.current = 0
 
 
-    def step(self,kd_sim,kd_map,ts,step_length,rng):
+    def step(self, kd_sim, kd_map, step_length, rng):
         """
         [Method]
         Update method
