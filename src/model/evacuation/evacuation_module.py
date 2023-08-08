@@ -121,7 +121,7 @@ class EvacuationModule(Module):
                         agent.get_attribute("home_node_id")    
                     )
 
-                    agent.set_attribute("target_evac", new_target)
+                    agent.set_attribute("target_evac", new_target.centroid)
                     self.log_ag_refused_evac(
                         ts,
                         agent.agent_id,

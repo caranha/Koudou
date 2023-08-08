@@ -41,17 +41,14 @@ class Controller():
             self.logger.write_log(key)
         self.logger.write_log("--------------------END---------------------")
         
-        '''
+        
         if self.d_param["MAP_CACHE"] is not None and path.isfile(self.d_param["MAP_CACHE"]):
             self.logger.write_log("Found Map Cache")
             self.load_map(self.d_param["MAP_CACHE"])
         else:
             self.logger.write_log("Unable to find Map Cache")
             self.load_map(self.d_param["MAP"])
-        '''
-
-        self.load_map(self.d_param["MAP"])
-        
+         
         if self.d_param["SIM_CONFIG"]:
             self.logger.write_log("--------------------Loading Simulation--------------------")
             self.load_sim()
