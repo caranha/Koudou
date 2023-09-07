@@ -52,7 +52,6 @@ class Controller():
             self.load_map(self.d_param["MAP"])
         '''
 
-
         # bindings
         if self.d_param["USE_VIEW"]:
             self.load_view()
