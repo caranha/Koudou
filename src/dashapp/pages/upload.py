@@ -24,6 +24,8 @@ layout = html.Div([
             is_open=False,
         ),
     ]),
+
+    html.P("Uploaded Files: infection_transition.csv, evac_refused_entry.csv, log.txt, ", style=style_offcanvas),
     html.Br(),
     html.Div("Upload Model One", style=style_title),
     dcc.Upload(

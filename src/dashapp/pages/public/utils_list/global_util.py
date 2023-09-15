@@ -1,9 +1,8 @@
-from src.util.time_stamp import TimeStamp
+from src.util import time_stamp as ts
 
 def timestamp_converter(timestamp):
-    ts = TimeStamp(timestamp)
-    time = '[' + str(ts.get_week()) + ' week ' + str(ts.get_day_of_week()) + ' days ' + str(ts.get_hour_min_str()) \
-           + ':' + str(ts.get_second()) + ']'
+    time = '[' + str(ts.get_week(timestamp)) + ' week ' + str(ts.get_day_of_week(timestamp)) + ' days ' + str(ts.get_hour_min_str(timestamp)) \
+           + ':' + str(ts.get_second(timestamp)) + ']'
     return time
 
 

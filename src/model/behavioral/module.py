@@ -11,7 +11,7 @@ class Module(ABC):
 	can 
 	"""   	
 	@abstractmethod
-	def step(self,kd_sim,kd_map,ts,step_length,rng,logger):
+	def step(self,kd_sim,kd_map,step_count,step_length,rng,logger):
 		"""
 		[Method]
 		Update method

@@ -7,7 +7,7 @@ class ActionChangeBehavior(Action):
         self.behavior_name = behavior_name
         self.agent = agent
 
-    def step(self,kd_sim,kd_map,ts,step_length,rng):
+    def step(self, kd_sim, kd_map, step_length, rng):
         """
         [Method]
         Update method

@@ -1,7 +1,6 @@
 from typing import List
 from src.model.behavioral import agent_manager
 from src.model.behavioral.agent import Agent
-from src.util.time_stamp import TimeStamp
 import src.model.map.a_star as a_star
 import pandas as pd
 class Simulation:
@@ -47,7 +46,7 @@ class Simulation:
 		logger.write_log("--------------------Finished Adding Simulation Attributes--------------------")
 
 		self.rng = rng
-		self.ts = TimeStamp(0)
+		self.step_count = 0
 		self.threads = threads
 		self.kd_map = kd_map
 		self.report = report
@@ -75,22 +74,26 @@ class Simulation:
 
 		return tempstring
 
-	def attribute_step(self,kd_sim,kd_map,ts,step_length,rng,logger):
+	def attribute_step(self,kd_sim,kd_map,step_count,step_length,rng,logger):
 		#update attribute
 		for attr in self.attributes:
-			self.attributes[attr].step(kd_sim,kd_map,ts,step_length,rng,None)
+			self.attributes[attr].step(kd_sim,kd_map,step_count,step_length,rng,None)
 
 	def step(self,step_length,logger):
+
 		self.get_agents_location()
 		self.ts.step(step_length)
+
+		self.step_count += step_length
+
 		# todo: this function basically cast types to the attrs, change its names
 		# why doesnt this happen on init?
-		self.attribute_step(self,self.kd_map,self.ts,step_length,self.rng,logger)
+		self.attribute_step(self,self.kd_map,self.step_count,step_length,self.rng,logger)
 		##############################################################################
 		# update all agents attribute
 		##############################################################################
 		for agent in self.agents:
-			agent.attribute_step(self,self.kd_map,self.ts,step_length,self.rng,logger)
+			agent.attribute_step(self,self.kd_map,self.step_count,step_length,self.rng,logger)
 
 		##############################################################################
 		# check for activities
@@ -98,7 +101,7 @@ class Simulation:
 		move_action_pool = []
 		for agent in self.agents:
 			# function below create all agents action but just returns the move actions, the others are saved on the agent
-			move_actions = agent.behavior_step(self,self.kd_map,self.ts,step_length,self.rng,logger)
+			move_actions = agent.behavior_step(self,self.kd_map,self.step_count,step_length,self.rng,logger)
 			move_action_pool.extend(move_actions)
 
 		##############################################################################
@@ -112,7 +115,7 @@ class Simulation:
 		# action step
 		##############################################################################
 		for agent in self.agents:
-			agent.action_step(self,self.kd_map,self.ts,step_length,self.rng,logger)
+			agent.action_step(self,self.kd_map,step_length,self.rng,logger)
 
 		##############################################################################
 		# construct location dictionary for ease of use
@@ -122,7 +125,7 @@ class Simulation:
 		# Plugins steps
 		##############################################################################
 		for module in self.modules:
-			module.step(self,self.kd_map,self.ts,step_length,self.rng,logger)
+			module.step(self,self.kd_map,self.step_count,step_length,self.rng,logger)
 		##############################################################################
 		# epidemicon
 		##############################################################################

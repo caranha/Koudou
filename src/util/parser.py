@@ -1,4 +1,5 @@
 from platform import system
+from src.util.paths import fromRoot
 
 def load_parameters(filename, seed):
     parameters = load_defaults()
@@ -6,7 +7,7 @@ def load_parameters(filename, seed):
     if filename is None:
         return parameters
 
-    with open(filename, 'r') as file:
+    with open(fromRoot(filename), 'r') as file:
         tmp_params = "".join(file.readlines())
 
     ctx = {"parameters": dict()}
@@ -18,8 +19,10 @@ def load_parameters(filename, seed):
     for key in ctx["parameters"].keys():
         parameters[key] = ctx["parameters"][key]
 
-    if seed is not None:
-        parameters['SEED'] = seed
+    if seed is None:
+        parameters['SEED'] = 999
+    else:
+        parameters['SEED'] = int(seed)
 
     return parameters
 

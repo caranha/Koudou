@@ -9,7 +9,7 @@ class AttributeUpdateable(Attribute):
         self.step_change = cast(step_change,self.typing)
 
 
-    def step(self,kd_sim,kd_map,ts,step_length,rng,agent):
+    def step(self,kd_sim,kd_map,step_count,step_length,rng,agent):
         self.value += self.step_change*step_length
         self.value = max(self.value,self.min_val) #protect minimum cap
         self.value = min(self.value, self.max_val) #protect max cap

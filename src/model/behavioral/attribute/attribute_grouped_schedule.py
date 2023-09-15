@@ -19,10 +19,10 @@ class AttributeGroupedSchedule(Attribute):
     def add_schedule(self, schedule):
         self.schedules.append(schedule)
 
-    def step(self,kd_sim,kd_map,ts,step_length,rng,agent):
+    def step(self,kd_sim,kd_map,step_count,step_length,rng,agent):
         self.value = False
         for x in self.schedules:
-            x.step(kd_sim,kd_map,ts,step_length,rng,agent)
+            x.step(kd_sim,kd_map,step_count,step_length,rng,agent)
             if x.get_value:
                 self.value = True
                 break
