@@ -62,13 +62,13 @@ class Map():
         key = rng.choice(list(self.d_residences.keys()),1)[0]
         return self.d_residences[key]
 
-    def get_random_business(self, business_type, qtd, rng, time_stamp=None, only_open=False, only_closed=False):
+    def get_random_business(self, business_type, qtd, rng, step_count=None, only_open=False, only_closed=False):
         
         condition = lambda b: b.type == business_type
         if only_open:
-            condition = lambda b: b.type == business_type and b.is_open(time_stamp)
+            condition = lambda b: b.type == business_type and b.is_open(step_count)
         elif only_closed:
-            condition = lambda b: b.type == business_type and not b.is_open(time_stamp)
+            condition = lambda b: b.type == business_type and not b.is_open(step_count)
 
         arr = [b for b in self.d_businesses.values() if condition(b)]
 
