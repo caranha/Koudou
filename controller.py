@@ -1,6 +1,7 @@
 import pickle
 import threading
 import numpy as np
+import pandas as pd
 
 from pathlib import Path
 from os import path, mkdir
@@ -153,6 +154,7 @@ class Controller():
 
 
     def run_simulation(self):
+        self.create_agentslocation_file()
         steps_in_a_minute =  (60)
         for d in range(0, self.d_param["MAX_STEPS"], self.d_param["STEP_LENGTH"]):
             self.run_step()
@@ -164,6 +166,9 @@ class Controller():
         time_log = f"{(d)} steps, {(d)/60} minutes"
         self.logger.write_log(data=time_log, filename="time.txt")
         
+    def create_agentslocation_file(self):
+        df=pd.DataFrame(data=[["id", "coordinate"]])
+        df.to_csv("location.csv", index=False,header=False)
 
     def run_auto(self):
         self.thread_finished = False
