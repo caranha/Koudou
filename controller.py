@@ -154,7 +154,7 @@ class Controller():
 
 
     def run_simulation(self):
-        self.create_location_file()
+        self.create_agentslocation_file()
         steps_in_a_minute =  (60)
         for d in range(0, self.d_param["MAX_STEPS"], self.d_param["STEP_LENGTH"]):
             self.run_step()
@@ -166,7 +166,7 @@ class Controller():
         time_log = f"{(d)} steps, {(d)/60} minutes"
         self.logger.write_log(data=time_log, filename="time.txt")
         
-    def create_location_file(self):
+    def create_agentslocation_file(self):
         df=pd.DataFrame(data=[["id", "coordinate"]])
         df.to_csv("location.csv", index=False,header=False)
 
