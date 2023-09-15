@@ -82,7 +82,7 @@ class Simulation:
 	def step(self,step_length,logger):
 
 		self.get_agents_location()
-		self.ts.step(step_length)
+
 
 		self.step_count += step_length
 
