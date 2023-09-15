@@ -2,6 +2,7 @@ from typing import List
 from src.model.behavioral import agent_manager
 from src.model.behavioral.agent import Agent
 import src.model.map.a_star as a_star
+import pandas as pd
 class Simulation:
 	def __init__(self,config,kd_map,rng,logger, agents_count,threads = 1, report = None):
 		self.agents: List[Agent] = []
@@ -79,7 +80,12 @@ class Simulation:
 			self.attributes[attr].step(kd_sim,kd_map,step_count,step_length,rng,None)
 
 	def step(self,step_length,logger):
+
+		self.get_agents_location()
+
+
 		self.step_count += step_length
+
 		# todo: this function basically cast types to the attrs, change its names
 		# why doesnt this happen on init?
 		self.attribute_step(self,self.kd_map,self.step_count,step_length,self.rng,logger)
@@ -123,6 +129,17 @@ class Simulation:
 		##############################################################################
 		# epidemicon
 		##############################################################################
+
+
+	def get_agents_location(self):
+		#record the agents location in every steps
+		agent_location = []
+		for agent in self.agents:
+			agent_location.append([agent.agent_id, agent.coordinate.get_lat_lon()])
+		# dataframe = pd.DataFrame(data=agent_location,columns=["id","coordinate"])
+		dataframe = pd.DataFrame(data=agent_location)
+		dataframe.to_csv("location.csv", mode='a', index=False, sep=",", header=False)
+
 
 	def group_agents_by_location(self):
 		self.d_agents_by_location = {}
