@@ -139,6 +139,7 @@ osm_files/
 results/
 
 cache/
+.idea/
 
 # debug code
 test.py
