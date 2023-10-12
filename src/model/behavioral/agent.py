@@ -92,3 +92,15 @@ class Agent:
 	def coordinate(self, value):
 		self.prev_coordinate = self._coordinate
 		self._coordinate     = value
+
+	@property
+	def recorded_coordinate(self):
+		return self._recorded_coordinate
+
+	@recorded_coordinate.setter
+	def recorded_coordinate(self, value):
+		self._recorded_coordinate = value
+	def calculate_move_ditance(self):
+		movement_distance = self.coordinate.calculate_distance(self.recorded_coordinate.lat,
+															   self.recorded_coordinate.lon)
+		return movement_distance

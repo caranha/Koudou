@@ -22,6 +22,12 @@ class Logger():
             line += data
             self.files[filename].write(line+"\n")
 
+    def write_location_log(self, data, level="debug", filename="location_log.txt"):
+        if (self.lvl_dic[level] >= self.level):
+            line = ""
+            line += data
+            self.files[filename].write(line + "\n")
+
     def write_data(self, filename, data):
         data = "\n".join([",".join(map(str, e)) for e in zip(*data)])
         self.files[filename].write(data+"\n")

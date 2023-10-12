@@ -23,6 +23,15 @@ class Coordinate():
         self.lat = lat
         self.lon = lon
 
+    def get_lat_lon_in_figures(self):
+        return (float(format(self.lat, '.5f')), float(format(self.lon, '.5f')))
+
+    def get_lat(self):
+        return float(format(self.lat, '.5f'))
+
+    def get_lon(self):
+        return float(format(self.lon, '.5f'))
+
     def get_lat_lon(self):
         """
         [Method] get_lat_lon

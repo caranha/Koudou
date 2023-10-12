@@ -81,7 +81,7 @@ class Simulation:
 
 	def step(self,step_length,logger):
 
-		self.get_agents_location()
+		self.get_agents_location(0.1,120)
 
 
 		self.step_count += step_length
@@ -130,16 +130,35 @@ class Simulation:
 		# epidemicon
 		##############################################################################
 
+	#def get_agents_location_in_log(self, frequency):
+	#	if (self.step_count % frequency == 0):
+	#		for agent in self.agents:
+	#			agentsInformation = str(agent.agent_id) + "," + str(
+	#							agent.coordinate.get_lat_lon_in_figures()) + "," + str(self.step_count)
+	#			self.logger.write_location_log(agentsInformation)
 
-	def get_agents_location(self):
-		#record the agents location in every steps
-		agent_location = []
-		for agent in self.agents:
-			agent_location.append([agent.agent_id, agent.coordinate.get_lat_lon()])
-		# dataframe = pd.DataFrame(data=agent_location,columns=["id","coordinate"])
-		dataframe = pd.DataFrame(data=agent_location)
-		dataframe.to_csv("location.csv", mode='a', index=False, sep=",", header=False)
-
+	def get_agents_location(self, distance, frequency):
+		time = self.step_count
+		if (time % frequency == 0):
+			agent_location = []
+			for agent in self.agents:
+				# location_length = len(str(agent.coordinate.get_lat_lon_in_figures()))
+				if (agent.calculate_move_ditance() >= distance):
+					# agent_location.append([str(time),str(agent.agent_id),str(agent.coordinate.get_lat_lon_in_figures())[1:location_length-1]])
+					id = str(agent.agent_id)
+					lat = str(agent.coordinate.get_lat())
+					lon = str(agent.coordinate.get_lon())
+					activity = agent.previous_activity
+					behavior = agent.current_behavior.name
+					behavior = behavior[0]
+					health = agent.get_attribute("covid")
+					health = health[0:2]
+					location = agent.get_attribute("location")
+					risk = agent.get_attribute("risk")
+					risk = risk[0]
+					agent_location.append([str(time), id, lat, lon, activity, behavior, health, location, risk])
+					agent.recorded_coordinate = agent.coordinate
+			pd.DataFrame(data=agent_location).to_csv("location.csv", mode='a', index=False, sep=",", header=False)
 
 	def group_agents_by_location(self):
 		self.d_agents_by_location = {}
