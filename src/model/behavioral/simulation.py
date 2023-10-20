@@ -152,7 +152,7 @@ class Simulation:
 					behavior = agent.current_behavior.name
 					behavior = behavior[0]
 					health = agent.get_attribute("covid")
-					health = health[0:2]
+					health = health[0:3]
 					location = agent.get_attribute("location")
 					risk = agent.get_attribute("risk")
 					risk = risk[0]
