@@ -10,6 +10,7 @@ from .way import Way
 from .osm_handler import OSMHandler
 from .map import Map
 from .node import Node
+from .relation import Relation
 from src.util.paths import fromRoot
 import numpy as np
 from typing import List
@@ -41,7 +42,12 @@ def build_map(osm_file_path, bldg_tags, business_data, grid_size=10,evacuation_c
 		n = [n["ref"] for  n in w["nodes"]]
 		ways.append(Way(w["id"], tags, n))
 
-	kd_map = Map(osm_map.bounding_box, nodes, ways)
+	relations = []
+	for r in osm_map.relations:
+		tags = {t[0]: t[1] for t in r["tags"]}
+		relations.append(Relation(r["id"], tags,  r["members"]))
+
+	kd_map = Map(osm_map.bounding_box, nodes, ways, relations)
 
 	print(f"Finished getting nodes and ways ({time.time() - st}s) ")
 	st = time.time()

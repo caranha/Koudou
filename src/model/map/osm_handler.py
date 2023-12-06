@@ -14,6 +14,7 @@ class OSMHandler(osmium.SimpleHandler):
     Properties:
         - nodes : [Node] array of nodes.
         - ways : [Way] array of ways.
+        - relations : [Relations] array of relations
         - bounding_box : the bounding box of the OSM file
 
     Nested dictionary as 21/10/27
@@ -56,6 +57,7 @@ class OSMHandler(osmium.SimpleHandler):
 
         self.nodes = []
         self.ways  = []
+        self.relations = []
         self.bounding_box = None
 
     def iter_to_list(self, iter):
@@ -90,6 +92,9 @@ class OSMHandler(osmium.SimpleHandler):
 
     def way(self, osm_way):
         self.ways.append(self.obj_to_dict(osm_way))
+    
+    def relation(self, osm_relation):
+        self.relations.append(self.obj_to_dict(osm_relation))
 
     def set_bounding_box(self,path):
         file = osmium.io.Reader(path, osmium.osm.osm_entity_bits.NOTHING)

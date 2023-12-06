@@ -5,18 +5,23 @@ from .road import Road
 from .place import Place
 from .node import Node
 from .way import Way
+from .relation import Relation
 from .coordinate import Coordinate
 import sys
 class Map():
-    def __init__(self, bounding_box: Any, nodes: List[Node], ways: List[Way]):
+    def __init__(self, bounding_box: Any, nodes: List[Node], ways: List[Way], relations: List[Relation]):
         self.d_nodes: Dict[str, Node] = {}
         self.d_ways: Dict[str, Way] = {}
+        self.d_relations: Dict[str, Relation] = {}
         self.main_road: List[Node] = []
         for node in nodes:
             self.d_nodes[node.id] = node
 
         for way in ways:
             self.d_ways[way.id] = way
+        
+        for relation in relations:
+            self.d_relations[relation.id] = relation
 
         self.min_coord = Coordinate(bounding_box.bottom_left.lat, bounding_box.bottom_left.lon)
         self.max_coord = Coordinate(bounding_box.top_right.lat, bounding_box.top_right.lon)
@@ -35,6 +40,9 @@ class Map():
 
     def add_way(self, way):
         self.d_ways[way.id] = way
+    
+    def add_relation(self, relation):
+        self.d_relations[relation.id] = relation
 
     def add_place(self, place):
         self.d_places[place.id] = place
@@ -51,6 +59,7 @@ class Map():
         tempstring += f"Simulated area = ({self.min_coord.lon},{self.min_coord.lat}) to ({self.max_coord.lon},{self.max_coord.lat})\n"
         tempstring += f"Number of nodes = {len(self.d_nodes)}\n"
         tempstring += f"Number of ways = {len(self.d_ways)}\n"
+        tempstring += f"Number of relations = {len(self.d_realtions)}\n"
         tempstring += f"Number of residence = {len(self.d_residences)}\n"
         tempstring += f"Number of evacuation centers = {len(self.d_evacuation_centers)}"
         return tempstring
