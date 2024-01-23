@@ -122,7 +122,7 @@ class View():
 
     def draw_initial_osm_map(self, osm_map: Map):
         self.draw.draw_places(d_places=osm_map.d_places, viewport=self.view_port)
-        self.draw.draw_roads(roads=osm_map.main_road, d_nodes=osm_map.d_nodes, viewport=self.view_port)
+        self.draw.draw_roads(roads=osm_map.main_road, d_nodes=osm_map.d_nodes, route_nodes=osm_map.route_nodes, viewport=self.view_port)
 
     def draw_initial_agents(self, agents: List[Agent]):
         self.draw.draw_agents(agent_list=agents, viewport=self.view_port)

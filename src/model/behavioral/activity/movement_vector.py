@@ -68,6 +68,13 @@ class MovementVector:
         speed = float(agent.get_attribute("walking_speed")) 
         if road is not None:
             speed *= road.modifier
+        route_nodes = kd_map.route_nodes
+        modified = False
+        for s in route_nodes:
+            if not modified and self.starting_node.id in s and self.destination_node.id in s:
+                modified = True
+                # modify the agent speed when on a route
+                speed *= 5
         distance =  speed*step_length 
         untraveled_distance = self.distance - self.passed_through_distance
         current_traveled_distance = min(distance,untraveled_distance)

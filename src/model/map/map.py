@@ -9,11 +9,12 @@ from .relation import Relation
 from .coordinate import Coordinate
 import sys
 class Map():
-    def __init__(self, bounding_box: Any, nodes: List[Node], ways: List[Way], relations: List[Relation]):
+    def __init__(self, bounding_box: Any, nodes: List[Node], ways: List[Way], relations: List[Relation], route_nodes: List[set]):
         self.d_nodes: Dict[str, Node] = {}
         self.d_ways: Dict[str, Way] = {}
         self.d_relations: Dict[str, Relation] = {}
         self.main_road: List[Node] = []
+        self.route_nodes = route_nodes
         for node in nodes:
             self.d_nodes[node.id] = node
 

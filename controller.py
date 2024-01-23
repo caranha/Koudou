@@ -43,15 +43,6 @@ class Controller():
         self.thread_finished = True
         self.rng = self.globals.rng
         self.step_length = self.globals.step_length
-        
-        '''
-        if self.d_param["MAP_CACHE"] is not None and path.isfile(self.d_param["MAP_CACHE"]):
-            self.logger.write_log("Found Map Cache")
-            self.load_map(self.d_param["MAP_CACHE"])
-        else:
-            self.logger.write_log("Unable to find Map Cache")
-            self.load_map(self.d_param["MAP"])
-        '''
 
         # bindings
         if self.d_param["USE_VIEW"]:

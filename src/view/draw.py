@@ -35,7 +35,7 @@ class Draw():
             else:#note: equivalent to "others" in epidemicon
                 #self.canvas.create_polygon(path_flat, outline=place.outline, fill="pink", width=2)
                 pass
-    def draw_roads(self, roads, d_nodes, viewport):
+    def draw_roads(self, roads, d_nodes, route_nodes, viewport):
         for road in roads:
             lon_a, lat_a = viewport.apply(*road.coordinate.get_lon_lat())
 

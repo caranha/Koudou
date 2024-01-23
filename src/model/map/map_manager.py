@@ -43,11 +43,23 @@ def build_map(osm_file_path, bldg_tags, business_data, grid_size=10,evacuation_c
 		ways.append(Way(w["id"], tags, n))
 
 	relations = []
+	route_ways = set()
 	for r in osm_map.relations:
 		tags = {t[0]: t[1] for t in r["tags"]}
 		relations.append(Relation(r["id"], tags,  r["members"]))
+		if "route" in tags:
+			for m in r["members"]:
+				route_ways.add(m['ref'])
+	route_nodes = []
+	for id in route_ways:
+		for w in ways:
+			if str(id) == w.id:
+				s = set()
+				for n in w.nodes:
+					s.add(n)
+				route_nodes.append(s)
 
-	kd_map = Map(osm_map.bounding_box, nodes, ways, relations)
+	kd_map = Map(osm_map.bounding_box, nodes, ways, relations, route_nodes)
 
 	print(f"Finished getting nodes and ways ({time.time() - st}s) ")
 	st = time.time()

@@ -14,11 +14,8 @@ class Relation():
     
     def __init__(self, osm_id: int, tags: Dict[str, str], members: List[int]):
         self.id = str(osm_id)
-        self.members = [str(m) for m in members] #convert the node_id from integer to str
+        self.members = members
         self.tags = tags
-        
-    def add_members(self, n_id):
-        self.members.append(n_id)
         
     def __str__(self):
         """

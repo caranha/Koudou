@@ -8,9 +8,9 @@ def scroll_linux(event, zoom_in, zoom_out, view_port, canvas):
 
 def scroll_mouse_wheel(event, zoom_in, zoom_out, view_port, canvas):
     if event.delta < 0:
-        on_zoom_in (event, zoom_in, view_port, canvas)
+        on_zoom_in (zoom_in, view_port, canvas)
     elif event.delta > 0:
-        on_zoom_out (event, zoom_out, view_port, canvas)
+        on_zoom_out (zoom_out, view_port, canvas)
 
 def focus_random_agent(rng, view_port, agents, canvas):
     ag: Agent = rng.choice(agents)
