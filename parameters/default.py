@@ -21,6 +21,8 @@ parameters = {
 
     "EVACUATION": {"DISTANCE":10, "SHARE_INFO_CHANCE": 0.8}, # Agents have 80% cahnce of sharing infor if they have a distance less than 10
 
+    "EMOTION": ['config/emotion/emotion.json'],  # Path to the basic emotion config file, can be expandable to connect more modules
+
     "SIM_CONFIG":{
         "condition" : ["config/behavioral/condition.csv",
                        "config/evacuation/condition_evac.csv",
@@ -43,6 +45,6 @@ parameters = {
             "evacuated"       : "config/evacuation/behavior/behavior_evacuated.csv",
             "self_isolation" : "config/infection/behavior/behavior_symptomatic.csv",
             "severe"         : "config/infection/behavior/behavior_severe.csv"
-        }
+        },
     }
 }

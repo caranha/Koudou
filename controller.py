@@ -16,6 +16,7 @@ from src.model.map.map_manager import build_map
 from src.model.behavioral.simulation import Simulation
 from src.model.infection.infection_module import InfectionModule
 from src.model.evacuation.evacuation_module import EvacuationModule
+from src.model.emotion.emotion_module import EmotionModule
 
 from src.model.behavioral.agent import Agent
 
@@ -153,7 +154,6 @@ class Controller():
             )
             self.sim.modules.append(infec_model)
             self.logger.write_log("--------------------Finished Loading Disease Module--------------------")
-                                
 
         if self.d_param["EVACUATION"]:
             self.logger.write_log("--------------------Loading Evacuation Module--------------------")
@@ -164,6 +164,15 @@ class Controller():
             )
             self.sim.modules.append(evac_module)
             self.logger.write_log("--------------------Finished Loading Disease Module--------------------")
+
+        if self.d_param['EMOTION']:
+            self.logger.write_log("--------------------Loading Emotion Module--------------------")
+            emotion_module = EmotionModule(
+                parameters=self.d_param['EMOTION'],
+                logger=self.logger,
+            )
+            self.sim.modules.append(emotion_module)
+            self.logger.write_log("--------------------Finished Loading Emotion Module--------------------")
 
     ## LOGGER
     def init_logger(self):
@@ -230,18 +239,26 @@ class Controller():
         # print("Processing... ", end="", flush=True)
 
         # LOGGING
-        # infection summary
         ########################### LOGGING ###########################################
+        # infection summary
         summarized_attr = self.sim.summarized_attribute("covid")
         log_data = {}
-        health_header = ["time_stamp","susceptible","exposed",
-                  "asymptomatic","symptomatic","severe","recovered"]
+        health_header = ["time_stamp", "susceptible", "exposed", "asymptomatic", "symptomatic", "severe", "recovered"]
         for h in health_header:
             log_data[h] = summarized_attr[h] if h in summarized_attr else 0
-        
         log_data["time"] = self.sim.ts.get_hour_min_str()
         log_data["time_stamp"] = self.sim.ts.step_count
         self.logger.write_csv_data("infection_summary.csv", log_data)
+
+        # emotion summary
+        summarized_attr = self.sim.summarized_attribute("emotion")
+        log_data = {}
+        emotion_header = ["time", "time_stamp", "indifferent", "worried", "afraid", "numb"]
+        for h in emotion_header:
+            log_data[h] = summarized_attr[h] if h in summarized_attr else 0
+        log_data["time"] = self.sim.ts.get_hour_min_str()
+        log_data["time_stamp"] = self.sim.ts.step_count
+        self.logger.write_csv_data("emotion_summary.csv", log_data)
 
         # mask summary
         summarized_mask_attr = self.sim.summarized_attribute("mask_wearing_type")
@@ -258,10 +275,8 @@ class Controller():
         log_data = {}
         log_data["time"] = self.sim.ts.get_hour_min_str()
         log_data["time_stamp"] = self.sim.ts.step_count
-        
         for k in summarized_attr.keys():
-            log_data[k]   = summarized_attr[k]
-
+            log_data[k] = summarized_attr[k]
         self.logger.write_csv_data("agent_position_summary.csv", log_data)
 
         ###########################################################################

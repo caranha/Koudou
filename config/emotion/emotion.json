@@ -1,0 +1,88 @@
+{
+  "name": "IWAN",
+  "concern_level": {
+    "negative": {
+      "maximum_value": 1.5,
+      "community": {
+        "update_rate": "per_day",
+        "multiplier": 3,
+        "note": "multiplied by infection increase rate, c=c+3*rate"
+      },
+      "family_infection": {
+        "update_rate": "per_day",
+        "family_symptomatic": 0.05,
+        "family_severe": 0.1,
+        "note": "added by the value of the infection state of the family member, c=c+0.05 if symptomatic, c=c+0.1 if severe"
+      },
+      "self_infection": {
+        "update_rate": "per_day",
+        "symptomatic": 0.2,
+        "severe": 0.3,
+        "note": "added by the value of the infection state, c=c+0.2 if symptomatic, c=c+0.3 if severe"
+      },
+      "evacuation": {
+        "update_rate": "while_evacuating",
+        "multiplier": 0.3,
+        "note": "multiplied by crowding factor in the evacuation centers, c=c+0.3*crowding"
+      }
+    },
+    "positive": {
+      "minimum_value": 0.5,
+      "community": {
+        "update_rate": "per_day",
+        "multiplier": 3,
+        "note": "multiplied by infection decrease rate, c=c+3*rate"
+      },
+      "constant_decay": {
+        "update_rate": "per_day",
+        "multiplier": -0.1,
+        "note": "added by the current concern factor, c=c-0.1*c"
+      }
+    }
+  },
+
+  "transition_states": {
+    "indifferent": {
+      "worried": {
+        "scale": "per_day",
+        "probability": 0.1
+      }
+    },
+    "worried": {
+      "indifferent": {
+        "scale": "per_day",
+        "probability": 0.1
+      },
+      "afraid": {
+        "scale": "per_day",
+        "probability": 0.01
+      }
+    },
+    "afraid": {
+      "worried": {
+        "scale": "per_day",
+        "probability": 0.05
+      },
+      "numb": {
+        "scale": "per_day",
+        "probability": 0.005
+      }
+    }
+  },
+
+  "masking_change": {
+    "forget_rate": {
+      "indifferent": 0.2,
+      "worried": 0,
+      "afraid": 0,
+      "numb": 0.5
+    },
+    "intention_change_rate": {
+      "indifferent": 0.1,
+      "worried": 0.3,
+      "afraid": 0.5,
+      "numb": 0
+    }
+  }
+}
+

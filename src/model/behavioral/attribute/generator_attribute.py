@@ -6,8 +6,8 @@ from .attribute_option import AttributeOption
 from .attribute_grouped_schedule import AttributeGroupedSchedule
 from .attribute_schedule import AttributeSchedule
 
-class GeneratorAttribute:
 
+class GeneratorAttribute:
 	def __init__(self,attribute_files,rng, logger):
 		self.attributes = []		
 		self.rng = rng
@@ -122,7 +122,6 @@ class GeneratorAttribute:
 				tempstring = f"Unknown target : {attr['target']} for attribute {attr['name']}\n"
 				tempstring += f"available target: agent or simulation"
 				raise ValueError(tempstring)
-
 
 	def load_updatable_attribute(self,file, logger):
 		updateable_attributes  = csv_reader.read_csv_as_dict(file)
@@ -260,7 +259,6 @@ class GeneratorAttribute:
 		for attr in self.basic:
 			if (self.basic[attr]["value"] == "!random"):
 				agent.add_attribute(Attribute(attr,self.rng.uniform(self.basic[attr]["min"],self.basic[attr]["max"]),self.basic[attr]["type"]))
-
 			else:
 				agent.add_attribute(Attribute(attr,self.basic[attr]["value"],self.basic[attr]["type"]))
 			if logging: logger.write_log("Added " + attr + " to agents")
@@ -309,12 +307,14 @@ class GeneratorAttribute:
 			agent.add_attribute(Attribute('if_wear_mask', True, 'bool'))
 			agent.add_attribute(Attribute('mask_wearing_type', 'n95_mask', 'string'))
 
+		# assign concern level to 1 for all agents
+		agent.add_attribute(Attribute('concern_level', 1, 'float'))
+
 		#calculate start time, end time, etc
 		start_time = self.rng.integers(temp["min_start_hour"],temp["max_start_hour"]+1,1)[0]
 		workhour = self.rng.integers(temp["min_workhour"],temp["max_workhour"]+1,1)[0]
 		end_time = (start_time + workhour)%24
 		workday = self.rng.integers(temp["min_workday"],temp["max_workday"]+1,1)[0]
-
 
 		# randomize day
 		workdays = temp["schedule"]
@@ -355,7 +355,6 @@ class GeneratorAttribute:
 			logger.write_log("Added profession to agents")
 
 		return agent
-
 
 	def generate_attribute_for_simulation(self, kd_sim, logger):
 		# add basic attribute

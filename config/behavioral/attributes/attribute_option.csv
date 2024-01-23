@@ -16,3 +16,7 @@
 "agent","quarantine",0,"Quaratined","string"
 "agent","Hospitalized",1,"Not hospitalized","string"
 "agent","Hospitalized",0,"Hospitalized","string"
+agent,emotion,0.95,indifferent,string
+agent,emotion,0.04,worried,string
+agent,emotion,0,afraid,string
+agent,emotion,0.01,numb,string

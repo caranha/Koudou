@@ -7,7 +7,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("-v", dest='use_view', action='store_true', help="Use UI")
     parser.add_argument("-p", dest='param', help="Parameter File")
-    parser.add_argument("-s", dest='seed', help='Random Seed')
+    parser.add_argument("-s", dest='seed', help='Random Seed', type=int, default=0)
     args = parser.parse_args()
 
     parameters = load_parameters(args.param, args.seed)
