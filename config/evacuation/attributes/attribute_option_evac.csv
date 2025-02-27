@@ -1,3 +1,3 @@
 "target","name","weight","value","type"
-"agent","know_evac",0.3,TRUE,"bool"
-"agent","know_evac",0.7,FALSE,"bool"
+"agent","know_evac",1.0,TRUE,"bool"
+"agent","know_evac",0.0,FALSE,"bool"

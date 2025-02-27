@@ -1,0 +1,16 @@
+{
+    "evacuation_centers": [
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504778"
+            },
+            "attributes": {
+                "name": " office",
+                "capacity": 1000,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+        }
+    ]
+}

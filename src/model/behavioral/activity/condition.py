@@ -14,6 +14,7 @@ class Condition:
 
 
         value = self.value
+        #print(value)
         if ("$" in value):
             value = agent.get_attribute(value.replace("$",""))
         value = cast(value,self.typing)

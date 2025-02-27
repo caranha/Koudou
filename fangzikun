@@ -1,0 +1,124 @@
+    1  pip
+    2  cd
+    3  request
+    4  python
+    5  python
+    6  vim
+    7  vim
+    8  /Applications/Python\ 3.11/Update\ Shell\ Profile.command ; exit;
+    9  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   10  python
+   11  $ brew install python
+   12  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   13  (echo; echo 'eval "$(/opt/homebrew/bin/brew shellenv)"') >> /Users/fangzikun/.zprofile
+   14  eval "$(/opt/homebrew/bin/brew shellenv)"
+   15  brew help
+   16  $ brew install python
+   17  $ brew install python
+   18  brew
+   19  brew install python3
+   20  python
+   21  python3
+   22  sudo ln -s /opt/homebrew/bin/python3 /usr/local/bin/python
+   23  python -v
+   24  python --version
+   25  pip
+   26  pip3
+   27  pip3 --version
+   28  vim
+   29  vim test.py
+   30  vim
+   31  cd Downloads
+   32  ls
+   33  ls | grep NetLogo
+   34  env
+   35  echo $LANG
+   36  echo $LC
+   37  $ curl -o track.zip https://s3-ap-northeast-1.amazonaws.com/track-cli/downloads/macos_x86_64/track.zip\n$ unzip track.zip\n$ sudo mv track /usr/local/bin\n$ track --version
+   38  $ curl -o track.zip https://s3-ap-northeast-1.amazonaws.com/track-cli/downloads/macos_x86_64/track.zip\n$ unzip track.zip\n$ sudo mv track /usr/local/bin\n$ track --version
+   39  cd
+   40  cd fangzikun
+   41  $
+   42  py
+   43  py nm.py
+   44  nm.py
+   45  vim
+   46  vim
+   47  vim
+   48  data.py
+   49  py data.py
+   50  cd tmp
+   51  open
+   52  vim
+   53  vim
+   54  git clone -b ALIFE_2023 https://github.com/caranha/Koudou.git\ncd Koudou\npip install -r requirements.txt
+   55  pip install -r requirements.txt
+   56  install -r requirements.txt
+   57  pip3
+   58  pip3 install -r requirements.txt
+   59  python3.11 -m pip install --upgrade pi
+   60  python3.11 -m pip3 install --upgrade pi
+   61  python3.11 -m pip install --upgrade pip
+   62  pip3 install -r requirements.txt
+   63  git clone -b ALIFE_2023 https://github.com/caranha/Koudou.git\ncd Koudou\npip3 install -r requirements.txt
+   64  setup.py clean
+   65  py setup.py clean
+   66  pip3 install -r /Users/fangzikun/Downloads/Koudou-main/requirements.txt
+   67  source /Users/fangzikun/Downloads/Koudou-main/venv/bin/activate\npip install osmium==3.6.0
+   68  pip install --upgrade pip
+   69  source /Users/fangzikun/Downloads/Koudou-main/venv/bin/activate\npip install osmium==3.6.0
+   70  source /Users/fangzikun/Downloads/Koudou-main/venv/bin/activate\npip install osmium==3.6.0
+   71  pip install -r requirements.txt
+   72  source /Users/fangzikun/Downloads/Koudou-main/venv/bin/activate\npip3 install osmium==3.6.0
+   73  brew install osmium-tool
+   74  source /Users/fangzikun/Downloads/Koudou-main/venv/bin/activate\npip install osmium==3.6.0
+   75  git clone -b ALIFE_2023 https://github.com/caranha/Koudou.git\ncd Koudou\npip install -r requirements.txt
+   76  brew install cmake
+   77  pip install -r requirements.txt
+   78  cd osm_files
+   79  cd koudou
+   80  osm_files
+   81  cd osm_files
+   82  cd osm_files
+   83  cd osm_files
+   84  cd osm_files
+   85  cd koudou
+   86  python main.py -p parameters/default.py -s 1111
+   87  python main.py
+   88  brew install tkinter
+   89  brew install --cask tint
+   90  brew install python-tk
+   91  python main.py -p parameters/default.py -s 1111
+   92  python main.py -p parameters/default.py -s 1111
+   93  python main.py -p parameters/default.py -s 1111
+   94  cd Koudou
+   95  python main.py -p parameters/default.py -s 1111
+   96  cd Kouidou
+   97  python main.py -p parameters/default.py -s 1111
+   98  cd koudou
+   99  python main.py -p parameters/default.py -s 1111
+  100  python main.py -p parameters/default.py -s 1111
+  101  python main.py -p parameters/default.py -s 1111
+  102  cd Koudou
+  103  python main.py -p parameters/default.py -s 1111
+  104  cd Koudou
+  105  python main.py -p parameters/default.py -s 1111
+  106  cd Koudou
+  107  python main.py -p parameters/default.py -s 1111
+  108  cd Koudou
+  109  python main.py -p parameters/default.py -s 1111
+  110  python main.py -p parameters/default.py -s 1111
+  111  cd Koudou
+  112  python main.py -p parameters/default.py -s 1111
+  113  cd Koudou
+  114  python main.py -p parameters/default.py -s 1111
+  115  python main.py -p parameters/default.py -s 1111
+  116  cd Koudou
+  117  python main.py -p parameters/default.py -s 1111
+  118  python main.py -p parameters/default.py -s 1111
+  119  python main.py -p parameters/default.py -s 1111
+  120  cd Koudou
+  121  python main.py -p parameters/default.py -s 1111
+  122  cd Koudou
+  123  python main.py -p parameters/default.py -s 1111
+  124  history 0 > fangzikun/history.log

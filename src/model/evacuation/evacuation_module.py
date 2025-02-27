@@ -12,7 +12,7 @@ class EvacuationModule(Module):
 
     def init_loger(self, logger):
         # evacuation
-        header = ["time_stamp", "ag_id", "evac_point_id", "evac_occupation", "evac_capacity", "total_evacuated"]
+        header = ["time_stamp", "ag_id", "evac_point_id", "evac_occupation", "evac_capacity", "total_evacuated", "total_traveled", "average_speed","used_energy"]
         logger.add_csv_file("evacuation.csv", header)
 
 
@@ -75,7 +75,6 @@ class EvacuationModule(Module):
         for evac_center_id in kd_map.d_evacuation_centers:
             evac_center =  kd_map.d_evacuation_centers[evac_center_id]
             capacity = int(evac_center.evacuation_attr["capacity"])
-
             if evac_center.centroid not in kd_sim.d_agents_by_location.keys():
                 continue #check if there are some agents in the evacuation point
             
@@ -106,7 +105,7 @@ class EvacuationModule(Module):
 
                     self.log_ag_evacuating(
                         ts, 
-                        agent.agent_id, 
+                        agent,
                         evac_center_id, 
                         occupation, 
                         capacity, 
@@ -121,26 +120,29 @@ class EvacuationModule(Module):
                         agent.get_attribute("home_node_id")    
                     )
 
-                    agent.set_attribute("target_evac", new_target)
+                    agent.set_attribute("target_evac", new_target.centroid)
                     self.log_ag_refused_evac(
                         ts,
                         agent.agent_id,
                         evac_center_id,
-                        new_target,
+                        new_target.centroid,
                         logger
                     )
 
-    def log_ag_evacuating(self, ts, ag_id, evac_id, occupation, capacity, logger):
-        log_txt = f"{ts.get_hour_min_str()}: ag {ag_id} evacuated at {evac_id}"
-        logger.write_log(log_txt, filename=self.logger_file)
+    def log_ag_evacuating(self, ts, ag, evac_id, occupation, capacity, logger):
+        log_txt = f"{ts.get_hour_min_str()}: ag {ag.agent_id} evacuated at {evac_id}"
+        # logger.write_log(log_txt, filename=self.logger_file)
 
         data = {
             "time_stamp": ts.step_count,
-            "ag_id": ag_id,
+            "ag_id": ag.agent_id,
             "evac_point_id": evac_id,
             "evac_occupation": occupation,
             "evac_capacity": capacity,
-            "total_evacuated": self.total_evac
+            "total_evacuated": self.total_evac,
+            "total_traveled":ag.distance,
+            "average_speed":ag.distance/ts.step_count,
+            "used_energy":ag.used_energy
         }
 
         logger.write_csv_data("evacuation.csv", data)

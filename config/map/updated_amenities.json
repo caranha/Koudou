@@ -1,0 +1,880 @@
+{
+    "amenities": [
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "402598030"
+            },
+            "attributes": {
+                "name": "theatre",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "604135010"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1037336827"
+            },
+            "attributes": {
+                "name": "police",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1168915314"
+            },
+            "attributes": {
+                "name": "townhall",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1168915315"
+            },
+            "attributes": {
+                "name": "community_centre",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1168915316"
+            },
+            "attributes": {
+                "name": "studio",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1168915322"
+            },
+            "attributes": {
+                "name": "place_of_worship",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236022962"
+            },
+            "attributes": {
+                "name": "dentist",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236022964"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236026407"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236041361"
+            },
+            "attributes": {
+                "name": "cafe",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236041373"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236067237"
+            },
+            "attributes": {
+                "name": "cafe",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236067239"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236074546"
+            },
+            "attributes": {
+                "name": "place_of_worship",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236074547"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236074557"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236249027"
+            },
+            "attributes": {
+                "name": "school",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252336"
+            },
+            "attributes": {
+                "name": "fast_food",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252337"
+            },
+            "attributes": {
+                "name": "fuel",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252338"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252339"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252344"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252346"
+            },
+            "attributes": {
+                "name": "dentist",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252347"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252359"
+            },
+            "attributes": {
+                "name": "veterinary",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252361"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252363"
+            },
+            "attributes": {
+                "name": "library",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252364"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252366"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252368"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252370"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252377"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252378"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252379"
+            },
+            "attributes": {
+                "name": "cafe",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252380"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252383"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236252384"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236467494"
+            },
+            "attributes": {
+                "name": "pharmacy",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504759"
+            },
+            "attributes": {
+                "name": "kindergarten",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504766"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504770"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504773"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504775"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504776"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504777"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504778"
+            },
+            "attributes": {
+                "name": "community_centre",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504779"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236504791"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236622483"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236622484"
+            },
+            "attributes": {
+                "name": "place_of_worship",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236622488"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236622491"
+            },
+            "attributes": {
+                "name": "courthouse",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236622496"
+            },
+            "attributes": {
+                "name": "social_facility",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236637119"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236637120"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236637121"
+            },
+            "attributes": {
+                "name": "doctors",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236637122"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236637123"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236637131"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236637135"
+            },
+            "attributes": {
+                "name": "place_of_worship",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236637136"
+            },
+            "attributes": {
+                "name": "grave_yard",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236637137"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236757608"
+            },
+            "attributes": {
+                "name": "fuel",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236757628"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236757850"
+            },
+            "attributes": {
+                "name": "grave_yard",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236767261"
+            },
+            "attributes": {
+                "name": "grave_yard",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236767698"
+            },
+            "attributes": {
+                "name": "place_of_worship",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236780109"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236783990"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236838177"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236838225"
+            },
+            "attributes": {
+                "name": "restaurant",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "1236847367"
+            },
+            "attributes": {
+                "name": "parking",
+                "capacity": 3000,
+                "contains_food": false,
+                "contains_medicine": false
+            }
+        }
+    ]
+}

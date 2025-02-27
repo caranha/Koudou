@@ -1,4 +1,6 @@
 import json
+import os
+import sqlite3
 from typing import Dict, List
 from src.model.behavioral.attribute.attribute import Attribute
 from .infection import Infection
@@ -224,6 +226,18 @@ def log(infection_type,disease,infector,infectee,logger,ts, old_mask_behavior):
         data["source_health"] = infector.get_attribute("covid")
         data["source_current_activity"] = infector.previous_activity
     logger.write_csv_data("new_infection.csv", data)
+    f=open('db_infections.temp','r')
+    db_name=f.readline()
+    conn = sqlite3.connect(db_name)
+
+    cursor = conn.cursor()
+    sql_execute_command = '''
+                            INSERT INTO Infections (TIMESTAMP,TYPE,ID,LOCATION,SOURCE_ID,SOURCE_LOCATION,SOURCE_LAT,SOURCE_LON,CURRENT_MASK,NEXT_MASK) \
+               VALUES (?,?,?,?,?,?,?,?,?,?)
+                        '''
+    cursor.execute(sql_execute_command, (data["time_stamp"], data["type"], data["agent_id"], data["agent_location"], data["source_id"], data["source_location"], data["source_lat"], data["source_lon"], data["current_mask"], data["next_mask"]))
+    conn.commit()
+    conn.close()
 
 def disease_transmission(step_size: int, kd_map: Map, population: List[Agent], disease: Disease, rng, logger, ts):
     infected_ags = [ag for ag in population if ag.get_attribute(disease.name) in disease.infectious_states]

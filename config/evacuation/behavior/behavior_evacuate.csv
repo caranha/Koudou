@@ -1,7 +1,7 @@
 "priority","name","conditions","conditions_type","actions"
-1,"switch_to_normal_from_evac","is_not_evac","None","change_behavior:normal"
+1,"switch_to_normal_from_evac","is_not_evac","None",change_behavior:normal
 2,"switch_to_hospitalization","is_severe","AND","change_behavior:severe"
-3,"switch_to_evacuated","evacuated,at_evac_point","None","change_behavior:evacuated"
+3,"switch_to_evacuated",at_evac_point,"None","change_behavior:evacuated"
 4,"go_home_to_take_necessity","no_necessity,not_at_home","AND","move:$home_node_id(id)"
 5,"take_necessity","no_necessity,at_home","AND","modify_attribute:taken_necessity-True,wait:5(min)-6(hour)"
 6,"move_to_evac_and_have_target","not_evacuated,know_evac,have_target","AND","move:$target_evac(id),modify_attribute:location-Evacuation_Point"

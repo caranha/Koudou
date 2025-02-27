@@ -31,6 +31,7 @@ def build_map(osm_file_path, bldg_tags, business_data, grid_size=10,evacuation_c
 	nodes = []
 	for n in osm_map.nodes:
 		coord = Coordinate(n["location"]["lat"], n["location"]["lon"])
+
 		tags = {t[0]: t[1] for t in n["tags"]}
 		nodes.append(Node(n["id"], tags, coord))
 
@@ -77,6 +78,7 @@ def build_map(osm_file_path, bldg_tags, business_data, grid_size=10,evacuation_c
 	kd_map.d_residences = residences
 	# repair_places(places, businesses, households)
 
+	#print("ZZZZZZZZZZ"+evacuation_center)
 	if evacuation_center is not None:
 		generate_evacuation_centers(kd_map,evacuation_center)
 
@@ -504,6 +506,7 @@ def generate_evacuation_centers(kd_map, file_path):
 	evacuation_dict = {}
 	with open(file_path) as file:
 		evacuation_dict = json.load(file)["evacuation_centers"]
+	print("ZZZZZZZZZZ"+str(evacuation_dict))
 	evacuation_center_dict = {}
 	for location in evacuation_dict:
 		try:

@@ -2,6 +2,7 @@ from src.model.behavioral.activity.action_move import ActionMove
 from src.model.behavioral.activity.action_wait import ActionWait
 from src.model.behavioral.activity.action_modify_attribute import ActionModifyAttribute
 from src.model.behavioral.activity.action_change_behavior import ActionChangeBehavior
+from src.model.behavioral.activity.action_modify_energy import ActionModifyEnergy
 
 class Activity:
 	def __init__(self,name, command = "and"):
@@ -67,6 +68,9 @@ class Activity:
 				actions.append(ActionModifyAttribute(agent,temp[1]))
 			elif (temp[0].lower()=="change_behavior"):
 				actions.append(ActionChangeBehavior(agent,temp[1]))
+			elif(temp[0].lower()=="modify_energy"):
+				actions.append(ActionModifyEnergy(agent,temp[1]))
+				#print(f"agent {agent.agent_id} update {temp[1]} energy in {self.name} energy: {agent.energy}")
 		return actions
 
 	def __str__(self):

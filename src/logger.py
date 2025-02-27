@@ -1,6 +1,7 @@
 import os
 import time
-import datetime
+import datetime as dt
+
 # import pandas as pd
 
 class Logger():
@@ -8,7 +9,10 @@ class Logger():
         self.exp_name = exp_name
         folder_name = time.asctime().split(" ")
         folder_name = "_".join(folder_name[1:])
-        self.path     = os.path.join("results", exp_name, time.asctime().replace(" ", "_").replace(":",""))
+        #self.path     = os.path.join("results", exp_name, time.asctime().replace(" ", "_").replace(":",""))
+        now=dt.datetime.now()
+        self.path = os.path.join("results", exp_name,now.isoformat())
+        #self.path = os.path.join("results", exp_name, time.strftime('%Y.%m.%d_%H:%M:%S',time.localtime()))
         self.files    = {}
         self.headers = {}
         os.makedirs(self.path, exist_ok=True)
@@ -19,6 +23,12 @@ class Logger():
     def write_log(self, data, level="debug", filename="log.txt"):
         if (self.lvl_dic[level] >= self.level):
             line = "[" + level + "] : "
+            line += data
+            self.files[filename].write(line+"\n")
+
+    def write_location_log(self,data,level="debug",filename="location_log.txt"):
+        if (self.lvl_dic[level] >= self.level):
+            line=""
             line += data
             self.files[filename].write(line+"\n")
 
@@ -37,7 +47,7 @@ class Logger():
         temp = ""
         self.write_log("Write CSV Data : " + filename + str(header))
         for x in header:
-            if x is 'event_id':
+            if x == 'event_id':
                 temp += ","
                 continue
             if temp != "":

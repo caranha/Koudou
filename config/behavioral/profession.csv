@@ -1,12 +1,11 @@
 name,min_workhour,max_workhour,place,min_age,max_age,weight,min_start_hour,max_start_hour,schedule,min_workday,max_workday,off_map,no_mask,surgical_mask,n95_mask
-student,9,9,school,4,18,450,8,9,weekday,5,5,FALSE,0.75,0.125,0.125
-university_student,4,9,university,18,60,1600,8,14,weekday,3,5,FALSE,0.75,0.125,0.125
-medical_doctor,8,24,hospital,25,70,100,0,23,everyday,5,7,FALSE,0,0,1
-teacher,9,9,school,23,70,100,8,9,weekday,5,5,FALSE,0.75,0.125,0.125
-university_professor ,5,9,university,28,70,200,8,9,weekday,3,5,FALSE,0.75,0.125,0.125
-salaryman_outside_city,9,9,train_station,19,70,800,8,9,weekday,5,5,TRUE,0.75,0.125,0.125
-retailer,8,8,retail,19,70,450,0,23,everyday,3,5,FALSE,0.75,0.125,0.125
-salaryman,4,5,office,19,70,1000,8,10,weekday,5,5,FALSE,0.75,0.125,0.125
-barber,7,8,barbershop,20,70,10,8,12,everyday,5,6,FALSE,0.75,0.125,0.125
-restaurant_worker,8,10,restaurant,16,70,140,0,18,everyday,5,7,FALSE,0.75,0.125,0.125
-scientist,5,9,laboratory,21,70,150,8,9,weekday,3,5,FALSE,0.75,0.125,0.125
+student,9,9,school,4,18,450,8,9,weekday,5,5,FALSE,1,0,0
+university_student,4,9,university,18,60,1600,8,14,weekday,3,5,FALSE,1,0,0
+medical_doctor,8,24,hospital,25,70,100,0,23,everyday,5,7,FALSE,1,0,0
+teacher,9,9,school,23,70,100,8,9,weekday,5,5,FALSE,1,0,0
+university_professor ,5,9,university,28,70,200,8,9,weekday,3,5,FALSE,1,0,0
+retailer,8,8,retail,19,70,450,0,23,everyday,3,5,FALSE,1,0,0
+salaryman,4,5,office,19,70,1000,8,10,weekday,5,5,FALSE,1,0,0
+barber,7,8,barbershop,20,70,10,8,12,everyday,5,6,FALSE,1,0,0
+restaurant_worker,8,10,restaurant,16,70,140,0,18,everyday,5,7,FALSE,1,0,0
+scientist,5,9,laboratory,21,70,150,8,9,weekday,3,5,FALSE,1,0,0

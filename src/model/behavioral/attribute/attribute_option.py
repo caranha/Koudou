@@ -24,7 +24,7 @@ class AttributeOption(Attribute):
                 self._unknown_type(self.typing)
             else:
                 self._casting_error(value,self.typing)
-
+        # self.value = temp_value
         success = False
         for x in self.options:
             if (x["value"] == temp_value):

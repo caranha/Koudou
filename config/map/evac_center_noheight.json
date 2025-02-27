@@ -1,0 +1,101 @@
+{
+    "evacuation_centers": [
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "487758238"
+            },
+            "attributes": {
+                "name" : "Kasuga Gakuen Obligatory Education School H27",
+                "capacity": 4000,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "144198893"
+            },
+            "attributes": {
+                "name" : "Azuma Elementary School H28",
+                "capacity": 400,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "260552751"
+            },
+            "attributes": {
+                "name" : "Kasuga Exchange Center H26",
+                "capacity": 400,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "143970885"
+            },
+            "attributes": {
+                "name" : "Tsukuba Capio H36",
+                "capacity": 400,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "143801539"
+            },
+            "attributes": {
+                "name" : "Tsukuba Innovation Plaza H36",
+                "capacity": 400,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "216503324"
+            },
+            "attributes": {
+                "name" : "Joyo Bank Azuma H28",
+                "capacity": 400,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "281239292"
+            },
+            "attributes": {
+                "name" : "Tsukuba Bank Headquarters H30",
+                "capacity": 400,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "426073131"
+            },
+            "attributes": {
+                "name" : "Azuma Exchange Center H31",
+                "capacity": 400,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+        }
+    ]
+}

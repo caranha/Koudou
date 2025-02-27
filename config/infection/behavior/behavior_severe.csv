@@ -3,5 +3,5 @@
 2,"switch_to_normal_recovered","is_recovered","NONE","change_behavior:normal"
 3,"switch_to_normal_asymptomatic","is_asymptomatic","NONE","change_behavior:normal"
 4,"go_to_hospital","not_at_hospital","NONE","move:hospital,modify_attribute:target_evac-none,modify_attribute:evacuated-False"
-5,"eat_at_hospital","hungry","NONE","Wait:20(minute)-60(minute),modify_attribute:hunger-max"
-6,"sleep","sleepy","NONE","wait:6(hours)-8(hours),modify_attribute:energy-max"
+5,"eat_at_hospital","hungry","NONE","Wait:20(minute)-60(minute),modify_attribute:hunger-max,modify_energy:restore-400"
+6,"sleep","sleepy","NONE","wait:6(hours)-8(hours),modify_attribute:energy-max,modify_energy:restore-7140"

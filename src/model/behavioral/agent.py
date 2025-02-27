@@ -1,5 +1,7 @@
 from src.model.map.coordinate import Coordinate
 from src.model.behavioral.activity.action_move import ActionMove
+import math
+
 class Agent:
 	def __init__(self,agent_id):
 		self.agent_id = agent_id
@@ -10,8 +12,25 @@ class Agent:
 		self.active_action = None
 		self._coordinate = Coordinate(0.0,0.0)
 		self.prev_coordinate = Coordinate(0.0,0.0)
+		self._recorded_coordinate=Coordinate(0.0,0.0)
 		self.previous_activity = ""
 		self.color = "#3333CC"
+		self.energy=3000
+		self.max_energy=3000
+		self.distance=0
+		self.used_energy=0
+
+
+
+	def update_distance(self,value):
+		self.distance+=value
+	def update_energy(self,value):
+		if(self.energy+value>self.max_energy):
+			self.energy=self.max_energy
+		elif(self.energy+value<=0):
+			self.energy=0
+		else:
+			self.energy+=value
 
 	def add_attribute(self,attr):
 		self.attributes[attr.name] = attr
@@ -88,7 +107,19 @@ class Agent:
 	def coordinate(self):
 		return self._coordinate
 
+	@property
+	def recorded_coordinate(self):
+		return  self._recorded_coordinate
+
+	@recorded_coordinate.setter
+	def recorded_coordinate(self,value):
+		self._recorded_coordinate=value
+
 	@coordinate.setter
 	def coordinate(self, value):
 		self.prev_coordinate = self._coordinate
 		self._coordinate     = value
+
+	def calculate_move_ditance(self):
+		movement_distance=self.coordinate.calculate_distance(self.recorded_coordinate.lat,self.recorded_coordinate.lon)
+		return  movement_distance

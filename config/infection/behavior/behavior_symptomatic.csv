@@ -5,5 +5,5 @@
 4,"switch_to_normal_recovered","is_recovered","NONE","change_behavior:normal"
 5,"switch_to_normal_asymptomatic","is_asymptomatic","NONE","change_behavior:normal"
 6,"go_home","not_at_home","NONE","move:$home_node_id(id)"
-7,"eat_at_home","hungry","NONE","wait:20-60"
-8,"sleep","sleepy","NONE","wait:6(hours)-8(hours),modify_attribute:energy-max"
+7,"eat_at_home","hungry","NONE","wait:20-60,modify_energy:restore-1710"
+8,"sleep","sleepy","NONE","wait:6(hours)-8(hours),modify_attribute:energy-max,modify_energy:restore-7140"

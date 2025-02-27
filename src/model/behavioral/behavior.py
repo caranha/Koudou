@@ -8,9 +8,12 @@ class Behavior:
 	def add_activity(self,activity):
 		self.activities.append(activity)
 
+
 	def step(self,kd_sim,kd_map,ts,step_length,rng,agent,logger):
 		move_action_pool = []
+		#print(f"agent {agent.agent_id} : {self.name}")
 		for act in self.activities:
+			#print(act.name)
 			if act.check_conditions(agent,kd_sim, kd_map, ts,rng):
 				if agent.previous_activity != act.name:
 					temp_activity = {}
@@ -26,6 +29,7 @@ class Behavior:
 					temp_activity["mask_behavior"] = agent.get_attribute("mask_wearing_type")
 					logger.write_csv_data("activity_history.csv", temp_activity, id=True)
 					agent.previous_activity = act.name
+
 				actions = act.generate_actions(agent,kd_map,ts,rng)
 				agent.actions.extend(actions)
 				for action in actions:

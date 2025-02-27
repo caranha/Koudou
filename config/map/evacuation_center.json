@@ -3,11 +3,24 @@
         {
             "selection": "by_id",
             "rules": {
-                "place_id": "487758238"
+                "place_id": "253975457"
             },
             "attributes": {
-                "name" : "Kasuga Gakuen Obligatory Education School",
-                "capacity": 200,
+                "name" : "Kasuga Gakuen Obligatory Education School H20",
+                "capacity": 400,
+                "contains_food": true,
+                "contains_medicine": false
+            }
+
+        },
+        {
+            "selection": "by_id",
+            "rules": {
+                "place_id": "626205573"
+            },
+            "attributes": {
+                "name" : "Azuma Elementary School H22",
+                "capacity": 400,
                 "contains_food": true,
                 "contains_medicine": false
             }
@@ -15,11 +28,11 @@
         {
             "selection": "by_id",
             "rules": {
-                "place_id": "144198893"
+                "place_id": "916939917"
             },
             "attributes": {
-                "name" : "Azuma Elementary School",
-                "capacity": 200,
+                "name" : "Kasuga Exchange Center H19",
+                "capacity": 400,
                 "contains_food": true,
                 "contains_medicine": false
             }
@@ -27,11 +40,11 @@
         {
             "selection": "by_id",
             "rules": {
-                "place_id": "260552751"
+                "place_id": "626205574"
             },
             "attributes": {
-                "name" : "Kasuga Exchange Center",
-                "capacity": 200,
+                "name" : "Tsukuba Capio H24",
+                "capacity": 400,
                 "contains_food": true,
                 "contains_medicine": false
             }
@@ -39,11 +52,11 @@
         {
             "selection": "by_id",
             "rules": {
-                "place_id": "143970885"
+                "place_id": "751217311"
             },
             "attributes": {
-                "name" : "Tsukuba Capio",
-                "capacity": 200,
+                "name" : "Tsukuba Innovation Plaza H25",
+                "capacity": 400,
                 "contains_food": true,
                 "contains_medicine": false
             }
@@ -51,11 +64,11 @@
         {
             "selection": "by_id",
             "rules": {
-                "place_id": "143801539"
+                "place_id": "427044783"
             },
             "attributes": {
-                "name" : "Tsukuba Innovation Plaza",
-                "capacity": 200,
+                "name" : "Joyo Bank Azuma H25",
+                "capacity": 400,
                 "contains_food": true,
                 "contains_medicine": false
             }
@@ -63,11 +76,11 @@
         {
             "selection": "by_id",
             "rules": {
-                "place_id": "216503324"
+                "place_id": "486988785"
             },
             "attributes": {
-                "name" : "Joyo Bank Azuma",
-                "capacity": 200,
+                "name" : "Tsukuba Bank Headquarters H23",
+                "capacity": 400,
                 "contains_food": true,
                 "contains_medicine": false
             }
@@ -75,23 +88,11 @@
         {
             "selection": "by_id",
             "rules": {
-                "place_id": "281239292"
+                "place_id": "793489892"
             },
             "attributes": {
-                "name" : "Tsukuba Bank Headquarters",
-                "capacity": 200,
-                "contains_food": true,
-                "contains_medicine": false
-            }
-        },
-        {
-            "selection": "by_id",
-            "rules": {
-                "place_id": "426073131"
-            },
-            "attributes": {
-                "name" : "Azuma Exchange Center",
-                "capacity": 200,
+                "name" : "Azuma Exchange Center H22",
+                "capacity": 400,
                 "contains_food": true,
                 "contains_medicine": false
             }

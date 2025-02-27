@@ -1,4 +1,12 @@
 target,name,value,min,max,type
 agent,walking_speed,1.46,-,-,float
+agent,running_speed,5.0,-,-,float
 agent,eat_out_preference,!random,0.1,0.9,float
 household,household_food_stock,!random,9,24,int
+agent,speedA,1.46,-,-,float
+agent,speedB,1.168,-,-,float
+agent,speedC,0.876,-,-,float
+agent,speedMin,0.73,-,-,float
+agent,walking_consume,1,-,-,int
+agent,can_run,True,-,-,bool
+agent,is_slope_on,True,-,-,bool

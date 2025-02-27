@@ -17,6 +17,7 @@ class ConditionRandom(Condition):
     def check_value(self,agent,kd_sim):
         value2 = self.rng.uniform(self.min_value, self.max_value)
         value = self.value
+        #print(str(value)+" "+str(value2))
         if ("$" in value):
             value = agent.get_attribute(value.replace("$",""))
         value = cast(value,self.typing)

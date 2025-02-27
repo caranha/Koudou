@@ -1,9 +1,15 @@
+import json
 import pickle
 import threading
 import numpy as np
+import sqlite3
+import hashlib
+import pandas as pb
 
 from pathlib import Path
 from os import path, mkdir
+import pandas as pd
+
 from src.model.map.map import Map#join, exists
 
 from src.view.view import View
@@ -16,7 +22,7 @@ from src.model.map.map_manager import build_map
 from src.model.behavioral.simulation import Simulation
 from src.model.infection.infection_module import InfectionModule
 from src.model.evacuation.evacuation_module import EvacuationModule
-
+from time import strftime, localtime
 from src.model.behavioral.agent import Agent
 
 class Controller():
@@ -39,17 +45,38 @@ class Controller():
         for key in self.d_param:
             self.logger.write_log(key)
         self.logger.write_log("--------------------END---------------------")
-        
-        '''
-        if self.d_param["MAP_CACHE"] is not None and path.isfile(self.d_param["MAP_CACHE"]):
+
+        def get_current_config_hash() -> str:
+            configs = [
+                json.dumps(self.d_param, sort_keys=True),
+            ]
+            for volatile_config_key in ["BUILDING_TAGS", "BUSINESS", "EVAC_CENTER"]:
+                with open(self.d_param[volatile_config_key], "r") as file:
+                    configs.append("".join(file.readlines()))
+            joined = "|".join(configs)
+            return hashlib.sha256(joined.encode()).hexdigest()
+
+        current_config_hash = get_current_config_hash()
+
+        def should_use_cache() -> bool:
+            if self.d_param["MAP_CACHE"] is None:
+                return False
+            if not path.isfile(self.d_param["MAP_CACHE"]):
+                return False
+            if not path.isfile(self.d_param["CACHED_MAP_CONFIG_HASH"]):
+                return False
+            with open(self.d_param["CACHED_MAP_CONFIG_HASH"], "r") as file:
+                cached_config_hash = "".join(file.readlines())
+            return cached_config_hash.strip() == current_config_hash
+
+        if should_use_cache():
             self.logger.write_log("Found Map Cache")
             self.load_map(self.d_param["MAP_CACHE"])
         else:
             self.logger.write_log("Unable to find Map Cache")
             self.load_map(self.d_param["MAP"])
-        '''
-
-        self.load_map(self.d_param["MAP"])
+            with open(self.d_param["CACHED_MAP_CONFIG_HASH"], "w") as file:
+                file.writelines([current_config_hash])
         
         if self.d_param["SIM_CONFIG"]:
             self.logger.write_log("--------------------Loading Simulation--------------------")
@@ -81,7 +108,7 @@ class Controller():
   
     ## load map
     def load_map(self, osm_file=None):
-        if osm_file is None and  self.d_param["USE_VIEW"]:
+        if osm_file is None and self.d_param["USE_VIEW"]:
             osm_file = self.view.ask_load_file()
         elif osm_file is None:
             raise Exception(f"Map file not specified!")
@@ -182,15 +209,18 @@ class Controller():
         header = ["time_stamp","location","count"]
         self.logger.add_csv_file("agent_position_summary.csv", header)
 
+        # location
+        # header=["id", "coordinate"]
+        # self.logger.add_csv_file("agent_position.csv", header)
+
         # activity
-        header = ["time", "time_stamp","agent_id","profession","location",
-                  "current_node_id","household_id","home_node_id","activy_name", "mask_behavior", "event_id"]
+        header = [ "time_stamp","agent_id","profession","location","activy_name", "mask_behavior"]
         self.logger.add_csv_file("activity_history.csv", header)
 
         # new infections
         header = ["time", "time_stamp","type","disease_name","agent_id",
-                  "agent_profession","agent_location","agent_node_id",
-                  "source_id","source_profession","source_location","source_node_id",
+                  "agent_profession","agent_location","agent_lat","agent_lon",
+                  "source_id","source_profession","source_location","source_lat","source_lon",
                   "current_mask", "next_mask"]
         self.logger.add_csv_file("new_infection.csv", header)
 
@@ -208,14 +238,17 @@ class Controller():
         self.logger.add_csv_file("evacuation.csv", header)
 
         # time stamp?
-        header = ["time", "time_stamp","","",""]
-        self.logger.add_csv_file("infection_transition.csv", header)
+        # header = ["time", "time_stamp","","",""]
+        # self.logger.add_csv_file("infection_transition.csv", header)
 
         # logs
         self.logger.add_file("log.txt")
 
         # logs
         self.logger.add_file("time.txt")
+
+        # logs
+        # self.logger.add_file("location_log.txt")
 
     ## SIM
     def step(self):
@@ -264,10 +297,12 @@ class Controller():
 
         self.logger.write_csv_data("agent_position_summary.csv", log_data)
 
+
         ###########################################################################
         # STEP
         self.sim.step(step_length = self.step_length,
                       logger      = self.logger)
+        #print(self.sim)
 
         # self.update_view() #todo: create an update loop, where we add move methods
         if self.d_param["USE_VIEW"]:
@@ -279,6 +314,7 @@ class Controller():
 
 
     def run_simulation(self):
+        self.create_location_file()
         steps_in_a_minute =  (60)
         for d in range(0, self.d_param["MAX_STEPS"], self.d_param["STEP_LENGTH"]):
             self.run_step()
@@ -292,6 +328,44 @@ class Controller():
         self.logger.write_log(data=time_log, filename="time.txt")
         
 
+    def create_location_file(self):
+        df=pd.DataFrame(data=[["time_number","id", "lat","lon","activity","behavior","covid","location","profession","risk",self.d_param["N_AGENTS"]]])
+        df.to_csv("location.csv", index=False,header=False)
+        db_name = strftime('%Y-%m-%d %H:%M:%S', localtime()) + ".db"
+        f=open('db_infections.temp','w+')
+        f.write(db_name)
+        f.close()
+        self.sim.db_name=db_name
+        conn = sqlite3.connect(db_name)
+        c = conn.cursor()
+        c.execute('''CREATE TABLE Locations
+                       (PID INTEGER PRIMARY KEY AUTOINCREMENT   NOT NULL,
+                        TIMESTAMP   INT ,
+                        ID INT,
+                        LAT NUMERIC(10,5),  
+                        LON NUMERIC(10,5),
+                        ACTIVITY TEXT,
+                        BEHAVIOR TEXT,
+                        COVID TEXT,
+                        LOCATION TEXT,
+                        PROFESSION TEXT,
+                        RISK CHAR);''')
+        conn.commit()
+        c.execute('''CREATE TABLE Infections
+                               (PID INTEGER PRIMARY KEY AUTOINCREMENT   NOT NULL,
+                                TIMESTAMP   INT ,
+                                TYPE TEXT,
+                                ID INT,
+                                LOCATION TEXT,
+                                SOURCE_ID INT,
+                                SOURCE_LOCATION TEXT,
+                                SOURCE_LAT NUMERIC(10,5),  
+                                SOURCE_LON NUMERIC(10,5),
+                                CURRENT_MASK TEXT,
+                                NEXT_MASK TEXT
+                                );''')
+        conn.commit()
+        conn.close()
     def run_auto(self):
         self.thread_finished = False
         while not self.thread_ask_stop:
